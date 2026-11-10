@@ -1,0 +1,34 @@
+---
+description: Project rules for the "Website in 5 minutes" design game
+alwaysApply: true
+---
+
+# Website in 5 minutes — project rules
+
+You are building a short, funny design game for Langara College's Department of Design Formation. The player picks a picky cartoon client, reads their brief, builds a one-page website by choosing sections, colours, fonts, a style, pictures and decoration in 5 minutes, then gets a verdict. At the end, the game points to the DF, DGMD and AIAP programs.
+
+## Read first
+- **The plan:** `BUILD.md`. Follow the milestones in order.
+- **Game content:** `data/game-data.json` is the single source of truth. Never hard-code clients, scores or copy.
+- **Sounds:** `data/sound-cues.json`.
+- **Tokens:** `design/tokens.css`. Use the variables; don't invent new colours.
+- **Visual reference:** `design/DESIGN.md` and the Figma file (Figma MCP, node IDs in `data/assets-manifest.json`).
+
+## Tech
+- Static site for GitHub Pages: plain HTML, CSS and ES modules. No framework, no bundler, relative paths only.
+- Node scripts in `/scripts` are for build-time only: assets and audio.
+
+## Never
+- Put API keys in browser code. ElevenLabs and Figma keys live only in `.env` (git-ignored) and are used only by `/scripts`.
+- Commit `.env`.
+- Collect personal data in stats.
+- Show text below WCAG AA contrast.
+- Rely on colour or sound alone to carry meaning.
+
+## Always
+- **Keyboard:** everything works by keyboard, with a visible focus ring. Touch targets are at least 44px.
+- **Reduced motion:** respect `prefers-reduced-motion` (fades instead of movement; no shake, wobble or confetti).
+- **Copy:** sentence case. Client voice lines appear as Caveat speech bubbles with `aria-live="polite"`.
+- **Motion tokens:** use them (`--dur-*`, `--ease-*`). Each screen gets one big moment and calm UI elsewhere.
+- **Sound:** play cues by ID from `sound-cues.json`. If a file is missing, fail silently.
+- **Quality:** test at 390, 834 and 1440 wide.

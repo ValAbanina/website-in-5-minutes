@@ -1,0 +1,140 @@
+/* ─────────────────────────────────────────────────────────────
+   Website in 5 minutes · design tokens
+   Mirrors the Figma variables. Two systems:
+   1. Game UI  — the game's own interface (fixed Langara brand)
+   2. Website Kit — what players choose for the client's website
+   ───────────────────────────────────────────────────────────── */
+
+/* Fonts (Google Fonts). Load only what the screen needs if you want to optimise. */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;600;700;800;900&family=Roboto:wght@400;500;700&family=Caveat:wght@400;700&family=Libre+Baskerville:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;800&family=Pacifico&family=UnifrakturMaguntia&family=Quicksand:wght@400;500;700&family=Bungee&family=Playfair+Display:wght@400;700&family=Abril+Fatface&family=Space+Grotesk:wght@400;700&family=Lato:wght@400;700&family=Nunito:wght@400;700&family=Source+Serif+4:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap');
+
+:root {
+  /* ── Game UI: colour (program = DF by default) ── */
+  --color-brand-primary: #D72885;      /* DF magenta. White text on it = 4.6:1 */
+  --color-brand-on-primary: #FFFFFF;
+  --color-brand-tint: #FBE5F1;
+  --color-brand-highlight-on-dark: #F48CC4;
+  --color-brand-highlight-on-light: #D72885;
+  --color-surface-default: #FFFFFF;
+  --color-surface-muted: #F2F2F2;
+  --color-surface-inverse: #414141;    /* Langara charcoal */
+  --color-surface-strong: #000000;
+  --color-text-default: #414141;
+  --color-text-strong: #000000;
+  --color-text-on-dark: #FFFFFF;
+  --color-border-default: #A7A9AC;     /* decorative only, never text, never the only boundary */
+  --color-border-strong: #000000;
+
+  /* Program colours */
+  --program-df: #D72885;
+  --program-dgmd: #00ABAB;
+  --program-aiap: #F7941E;
+
+  /* Status (meter, stamps). Stamp/icon colours pass AA on white. */
+  --mood-happy: #00ABAB;
+  --mood-meh: #F7941E;
+  --mood-meltdown: #D72885;
+  --stamp-approved: #007A7A;
+  --stamp-revisions: #B35F00;
+  --stamp-meltdown: #D72885;
+
+  /* Client colours (each client's screens) */
+  --client-gerald: #8FB8E8;
+  --client-kaia: #B8FF2E;
+  --client-rosa: #F6B38E;
+  --client-damien: #5B2A4A;   /* white text on Damien */
+  --client-brenda: #E8C8B8;
+
+  /* ── Game UI: type ── */
+  --font-display: 'Roboto Condensed', 'Arial Narrow', sans-serif;
+  --font-body: 'Roboto', system-ui, sans-serif;
+  --font-hand: 'Caveat', cursive;          /* client voice; never below 24px */
+  --type-display: 900 104px/0.92 var(--font-display);
+  --type-h1: 800 60px/1.0 var(--font-display);
+  --type-h2: 700 40px/1.08 var(--font-display);
+  --type-h3: 700 26px/1.18 var(--font-display);
+  --type-card-name: 800 22px/1.1 var(--font-display);
+  --type-callout: 700 20px/1.28 var(--font-display);
+  --type-label: 700 15px/1.2 var(--font-display);
+  --type-button: 700 20px/1.2 var(--font-display);
+  --type-body: 400 18px/1.5 var(--font-body);
+  --type-body-small: 400 14px/1.45 var(--font-body);
+  --type-hand: 700 34px/1.12 var(--font-hand);
+  --type-number: 900 72px/1 var(--font-display);
+
+  /* ── Game UI: shape ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-press: 0 5px 0 #000;
+  --shadow-press-hover: 0 7px 0 #000;
+  --shadow-card: 6px 6px 0 #000;
+  --shadow-lift: 10px 12px 0 #000;
+  --border-ui: 2px solid #000;
+
+  /* Spacing (4px base) */
+  --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px;
+  --space-lg: 24px; --space-xl: 32px; --space-2xl: 48px; --space-3xl: 64px; --space-4xl: 96px;
+
+  /* ── Motion ── */
+  --dur-press: 80ms;
+  --dur-hover: 120ms;
+  --dur-pop: 240ms;
+  --dur-move: 320ms;
+  --dur-screen: 400ms;
+  --dur-moment: 900ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+  --ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-stamp: cubic-bezier(0.7, 0, 0.84, 0);
+}
+
+/* Program themes (Learn more cards, info-session buttons) */
+[data-program="dgmd"] { --color-brand-primary: #00ABAB; --color-brand-on-primary: #000; --color-brand-tint: #DDF3F3; --color-brand-highlight-on-dark: #5FD3D3; --color-brand-highlight-on-light: #007A7A; }
+[data-program="aiap"] { --color-brand-primary: #F7941E; --color-brand-on-primary: #000; --color-brand-tint: #FEEFDC; --color-brand-highlight-on-dark: #F9A84B; --color-brand-highlight-on-light: #B35F00; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-pop: 1ms; --dur-move: 1ms; --dur-screen: 120ms; --dur-moment: 200ms; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Website Kit — applied to the preview root:
+   <div class="site" data-palette="navy-ledger" data-heading="libre-baskerville" data-body="lato" data-style="classic">
+   ───────────────────────────────────────────────────────────── */
+.site { background: var(--kit-bg); color: var(--kit-text); font-family: var(--kit-font-body); }
+
+[data-palette="navy-ledger"]  { --kit-bg:#FFFFFF; --kit-surface:#EEF2F7; --kit-text:#13233F; --kit-muted:#5A6B85; --kit-accent:#1F3A68; --kit-on-accent:#FFFFFF; --kit-accent-2:#8FB8E8; --kit-on-accent-2:#13233F; --kit-accent-text:#1F3A68; --kit-border:#CBD5E1; }
+[data-palette="neon-pop"]     { --kit-bg:#12002E; --kit-surface:#2A0A57; --kit-text:#FFFFFF; --kit-muted:#C9B8FF; --kit-accent:#FF3EA5; --kit-on-accent:#12002E; --kit-accent-2:#B8FF2E; --kit-on-accent-2:#12002E; --kit-accent-text:#FF3EA5; --kit-border:#5B2FA8; }
+[data-palette="warm-bakery"]  { --kit-bg:#FFF6E9; --kit-surface:#F6E2C6; --kit-text:#4A2C1A; --kit-muted:#7A533C; --kit-accent:#B5452F; --kit-on-accent:#FFFFFF; --kit-accent-2:#F6B38E; --kit-on-accent-2:#4A2C1A; --kit-accent-text:#A43D29; --kit-border:#E3C9A6; }
+[data-palette="dark-romance"] { --kit-bg:#0D0B0C; --kit-surface:#1E1719; --kit-text:#F2E9E4; --kit-muted:#A99A96; --kit-accent:#8E1B2B; --kit-on-accent:#F2E9E4; --kit-accent-2:#5B2A4A; --kit-on-accent-2:#F2E9E4; --kit-accent-text:#E05468; --kit-border:#3A2A2E; }
+[data-palette="calm-sage"]    { --kit-bg:#F7F5EF; --kit-surface:#E3E8DC; --kit-text:#2F3B2F; --kit-muted:#55644F; --kit-accent:#55745A; --kit-on-accent:#FFFFFF; --kit-accent-2:#E8C8B8; --kit-on-accent-2:#2F3B2F; --kit-accent-text:#4A6650; --kit-border:#D3D9CB; }
+[data-palette="candy-pastel"] { --kit-bg:#FFF0F6; --kit-surface:#E8F4FF; --kit-text:#3B2A4D; --kit-muted:#6E5A82; --kit-accent:#B23A8A; --kit-on-accent:#FFFFFF; --kit-accent-2:#9AD7FF; --kit-on-accent-2:#3B2A4D; --kit-accent-text:#A3307C; --kit-border:#F2C6DE; }
+[data-palette="acid-pop"]     { --kit-bg:#FFE600; --kit-surface:#FFFFFF; --kit-text:#111111; --kit-muted:#3A3A3A; --kit-accent:#111111; --kit-on-accent:#FFE600; --kit-accent-2:#FF3EA5; --kit-on-accent-2:#111111; --kit-accent-text:#111111; --kit-border:#111111; }
+[data-palette="terracotta"]   { --kit-bg:#F9EFE6; --kit-surface:#EFDCCB; --kit-text:#3E2723; --kit-muted:#6D4C41; --kit-accent:#A0522D; --kit-on-accent:#FFFFFF; --kit-accent-2:#A9C38A; --kit-on-accent-2:#1F1611; --kit-accent-text:#8E4526; --kit-border:#DCC3B0; }
+[data-palette="midnight-ink"] { --kit-bg:#0B1020; --kit-surface:#161D33; --kit-text:#E6E8EF; --kit-muted:#A3ABBF; --kit-accent:#7A5C9E; --kit-on-accent:#FFFFFF; --kit-accent-2:#C9CED9; --kit-on-accent-2:#0B1020; --kit-accent-text:#B49BD6; --kit-border:#2A3350; }
+[data-palette="ocean-mist"]   { --kit-bg:#F3F8FA; --kit-surface:#DCEBF0; --kit-text:#23404A; --kit-muted:#4F6B75; --kit-accent:#3A7383; --kit-on-accent:#FFFFFF; --kit-accent-2:#F2D7C9; --kit-on-accent-2:#23404A; --kit-accent-text:#2F6574; --kit-border:#CFE0E6; }
+
+[data-heading="libre-baskerville"]   { --kit-font-heading: 'Libre Baskerville', serif; --kit-heading-weight: 700; }
+[data-heading="bricolage-grotesque"] { --kit-font-heading: 'Bricolage Grotesque', sans-serif; --kit-heading-weight: 800; }
+[data-heading="pacifico"]            { --kit-font-heading: 'Pacifico', cursive; --kit-heading-weight: 400; }
+[data-heading="unifrakturmaguntia"]  { --kit-font-heading: 'UnifrakturMaguntia', serif; --kit-heading-weight: 400; }
+[data-heading="quicksand"]           { --kit-font-heading: 'Quicksand', sans-serif; --kit-heading-weight: 500; }
+[data-heading="bungee"]              { --kit-font-heading: 'Bungee', sans-serif; --kit-heading-weight: 400; }
+[data-heading="playfair-display"]    { --kit-font-heading: 'Playfair Display', serif; --kit-heading-weight: 700; }
+[data-heading="abril-fatface"]       { --kit-font-heading: 'Abril Fatface', serif; --kit-heading-weight: 400; }
+[data-heading="space-grotesk"]       { --kit-font-heading: 'Space Grotesk', sans-serif; --kit-heading-weight: 700; }
+[data-heading="caveat"]              { --kit-font-heading: 'Caveat', cursive; --kit-heading-weight: 700; }
+
+[data-body="lato"]               { --kit-font-body: 'Lato', sans-serif; }
+[data-body="nunito"]             { --kit-font-body: 'Nunito', sans-serif; }
+[data-body="source-serif-4"]     { --kit-font-body: 'Source Serif 4', serif; }
+[data-body="space-grotesk"]      { --kit-font-body: 'Space Grotesk', sans-serif; }
+[data-body="cormorant-garamond"] { --kit-font-body: 'Cormorant Garamond', serif; }
+[data-body="caveat"]             { --kit-font-body: 'Caveat', cursive; }
+
+[data-style="classic"]       { --kit-radius-card: 6px;  --kit-radius-button: 6px;   --kit-radius-image: 4px;  --kit-border-width: 1px; --kit-border-color: var(--kit-border); --kit-shadow: 0 2px 6px rgba(0,0,0,.10); }
+[data-style="minimal"]       { --kit-radius-card: 0;    --kit-radius-button: 0;     --kit-radius-image: 0;    --kit-border-width: 1px; --kit-border-color: var(--kit-border); --kit-shadow: none; }
+[data-style="soft-rounded"]  { --kit-radius-card: 20px; --kit-radius-button: 14px;  --kit-radius-image: 20px; --kit-border-width: 0;   --kit-border-color: var(--kit-border); --kit-shadow: 0 10px 30px rgba(0,0,0,.12); }
+[data-style="neo-brutalist"] { --kit-radius-card: 0;    --kit-radius-button: 0;     --kit-radius-image: 0;    --kit-border-width: 3px; --kit-border-color: var(--kit-text);   --kit-shadow: 6px 6px 0 var(--kit-text); }
+[data-style="playful"]       { --kit-radius-card: 24px; --kit-radius-button: 999px; --kit-radius-image: 28px; --kit-border-width: 2px; --kit-border-color: var(--kit-text);   --kit-shadow: 0 5px 0 var(--kit-accent-2); }

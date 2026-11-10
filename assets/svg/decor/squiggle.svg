@@ -1,0 +1,18 @@
+<svg width="720" height="320" viewBox="0 0 720 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<g id="Decor">
+
+
+<g id="Kind=Squiggle" clip-path="url(#clip0_3_4)">
+<g id="Shapes">
+<path id="Vector" d="M24 64C44 40 64 40 84 64C104 88 124 88 144 64C164 40 184 40 204 64" stroke="#8FB8E8" stroke-width="7" stroke-linecap="round"/>
+<path id="Vector_2" d="M520 268C540 244 560 244 580 268C600 292 620 292 640 268C660 244 680 244 700 268" stroke="#8FB8E8" stroke-width="7" stroke-linecap="round"/>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_3_4">
+<rect width="720" height="320" fill="white"/>
+</clipPath>
+</defs>
+</svg>

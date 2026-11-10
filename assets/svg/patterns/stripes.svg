@@ -1,0 +1,20 @@
+<svg width="720" height="400" viewBox="0 0 720 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<g id="Pattern">
+
+
+<g id="Pattern=Stripes" clip-path="url(#clip0_3_4)">
+<g id="Stripes" opacity="0.16" clip-path="url(#clip1_3_4)">
+<path id="Vector" d="M-400 400L0 0M-372 400L28 0M-344 400L56 0M-316 400L84 0M-288 400L112 0M-260 400L140 0M-232 400L168 0M-204 400L196 0M-176 400L224 0M-148 400L252 0M-120 400L280 0M-92 400L308 0M-64 400L336 0M-36 400L364 0M-8 400L392 0M20 400L420 0M48 400L448 0M76 400L476 0M104 400L504 0M132 400L532 0M160 400L560 0M188 400L588 0M216 400L616 0M244 400L644 0M272 400L672 0M300 400L700 0M328 400L728 0M356 400L756 0M384 400L784 0M412 400L812 0M440 400L840 0M468 400L868 0M496 400L896 0M524 400L924 0M552 400L952 0M580 400L980 0M608 400L1008 0M636 400L1036 0M664 400L1064 0M692 400L1092 0" stroke="#8FB8E8" stroke-width="6"/>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_3_4">
+<rect width="720" height="400" fill="white"/>
+</clipPath>
+<clipPath id="clip1_3_4">
+<rect width="720" height="400" fill="white"/>
+</clipPath>
+</defs>
+</svg>

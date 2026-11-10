@@ -1,0 +1,26 @@
+<svg width="320" height="220" viewBox="0 0 320 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<g id="Picture">
+
+
+<g id="Picture=Charts">
+<g clip-path="url(#clip0_3_4)">
+<path d="M0 4C0 1.79086 1.79086 0 4 0H316C318.209 0 320 1.79086 320 4V216C320 218.209 318.209 220 316 220H4C1.79086 220 0 218.209 0 216V4Z" fill="#EEF2F7"/>
+<g id="Illustration">
+<path id="Vector" d="M80 120H40V190H80V120Z" fill="#1F3A68"/>
+<path id="Vector_2" d="M140 90H100V190H140V90Z" fill="#1F3A68"/>
+<path id="Vector_3" d="M200 60H160V190H200V60Z" fill="#1F3A68"/>
+<path id="Vector_4" d="M40 100L100 70L160 50L214 30" stroke="#13233F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M256 180C278.091 180 296 162.091 296 140C296 117.909 278.091 100 256 100C233.909 100 216 117.909 216 140C216 162.091 233.909 180 256 180Z" fill="#8FB8E8"/>
+<path id="Vector_6" d="M256 167C270.912 167 283 154.912 283 140C283 125.088 270.912 113 256 113C241.088 113 229 125.088 229 140C229 154.912 241.088 167 256 167Z" stroke="#13233F" stroke-width="4"/>
+<path id="Vector_7" d="M290 190H30V194H290V190Z" fill="#13233F"/>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_3_4">
+<path d="M0 4C0 1.79086 1.79086 0 4 0H316C318.209 0 320 1.79086 320 4V216C320 218.209 318.209 220 316 220H4C1.79086 220 0 218.209 0 216V4Z" fill="white"/>
+</clipPath>
+</defs>
+</svg>

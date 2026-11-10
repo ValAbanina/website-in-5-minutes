@@ -1,0 +1,482 @@
+{
+  "meta": {
+    "title": "Website in 5 minutes",
+    "by": "Langara College, Department of Design Formation",
+    "figma": "https://www.figma.com/design/6NPkrb0UeMPWLPTQtNXFcc/Game---Website-In-5-min",
+    "timerSeconds": 300,
+    "hurryAtSeconds": 60,
+    "panicAtSeconds": 15,
+    "clientHurryCommentAtSeconds": 30,
+    "idleResetSeconds": 60,
+    "liveCommentMinGapSeconds": 4,
+    "note": "Single source of truth for the game. The Figma file is the visual reference; this file is what the code reads."
+  },
+
+  "flow": [
+    { "id": "attract", "screen": "00 Attract loop", "next": "start", "notes": "Shown after 60s idle. Clients take turns speaking (3.5s each). Silent until first tap." },
+    { "id": "start", "screen": "01 Start", "next": "pick", "actions": ["Start the clock", "How to play"] },
+    { "id": "howto", "screen": "01b How to play", "type": "modal", "actions": ["Got it"] },
+    { "id": "pick", "screen": "02 Pick a client", "next": "brief", "notes": "Arrow keys browse, Enter picks. 'Surprise me' picks a random client not played this session." },
+    { "id": "brief", "screen": "03 Brief", "next": "build", "notes": "Client speaks the brief (voice + bubble). Timer starts on 'Start building'." },
+    { "id": "build", "screen": "04a-e Builder", "next": "verdict", "notes": "Tabs: Colour, Type, Style, Images, Decor. 'Send to <client>' any time." },
+    { "id": "timesup", "screen": "04f Time's up", "next": "verdict", "notes": "At 0:00 the Deadline appears and sends the site exactly as it is." },
+    { "id": "verdict", "screen": "05 Verdict", "next": "pick", "actions": ["Next client", "Share result", "Learn the theory"] },
+    { "id": "share", "screen": "05d Share card", "type": "image", "size": [1080, 1080] },
+    { "id": "learn", "screen": "06 Learn more", "actions": ["Play again", "Explore <program>", "Book an info session"] }
+  ],
+
+  "programs": [
+    { "id": "df", "name": "Design Formation", "tagline": "Design for physical spaces", "description": "Graphic, interior and architectural design in one hands-on diploma, for creative people who don’t want to pick just one thing yet.", "learn": ["Graphic design", "Interior design", "Architecture"], "url": "https://www.designformation.ca/design-formation", "infoSessionUrl": "TODO", "color": "#D72885", "onColor": "#FFFFFF" },
+    { "id": "dgmd", "name": "Digital Media & Design", "tagline": "Design for digital experiences", "description": "UX/UI design and front-end development in one diploma, so you can design a digital product and build it too.", "learn": ["UX/UI design", "Front-end code", "Digital products"], "url": "https://www.designformation.ca/dgmd", "infoSessionUrl": "TODO", "color": "#00ABAB", "onColor": "#000000" },
+    { "id": "aiap", "name": "AI Application Design & Development", "tagline": "Design. Develop. Deliver.", "description": "Two diplomas, designer and developer, learning side by side and building AI-driven products for real clients.", "learn": ["Interface design", "AI integration", "Team projects"], "url": "https://www.designformation.ca/aiap", "infoSessionUrl": "TODO", "color": "#F7941E", "onColor": "#000000" }
+  ],
+
+  "kit": {
+    "palettes": [
+      { "id": "navy-ledger", "name": "Navy Ledger", "bg": "#FFFFFF", "surface": "#EEF2F7", "text": "#13233F", "muted": "#5A6B85", "accent": "#1F3A68", "onAccent": "#FFFFFF", "accent2": "#8FB8E8", "onAccent2": "#13233F", "accentText": "#1F3A68", "border": "#CBD5E1" },
+      { "id": "neon-pop", "name": "Neon Pop", "bg": "#12002E", "surface": "#2A0A57", "text": "#FFFFFF", "muted": "#C9B8FF", "accent": "#FF3EA5", "onAccent": "#12002E", "accent2": "#B8FF2E", "onAccent2": "#12002E", "accentText": "#FF3EA5", "border": "#5B2FA8" },
+      { "id": "warm-bakery", "name": "Warm Bakery", "bg": "#FFF6E9", "surface": "#F6E2C6", "text": "#4A2C1A", "muted": "#7A533C", "accent": "#B5452F", "onAccent": "#FFFFFF", "accent2": "#F6B38E", "onAccent2": "#4A2C1A", "accentText": "#A43D29", "border": "#E3C9A6" },
+      { "id": "dark-romance", "name": "Dark Romance", "bg": "#0D0B0C", "surface": "#1E1719", "text": "#F2E9E4", "muted": "#A99A96", "accent": "#8E1B2B", "onAccent": "#F2E9E4", "accent2": "#5B2A4A", "onAccent2": "#F2E9E4", "accentText": "#E05468", "border": "#3A2A2E" },
+      { "id": "calm-sage", "name": "Calm Sage", "bg": "#F7F5EF", "surface": "#E3E8DC", "text": "#2F3B2F", "muted": "#55644F", "accent": "#55745A", "onAccent": "#FFFFFF", "accent2": "#E8C8B8", "onAccent2": "#2F3B2F", "accentText": "#4A6650", "border": "#D3D9CB" },
+      { "id": "candy-pastel", "name": "Candy Pastel", "bg": "#FFF0F6", "surface": "#E8F4FF", "text": "#3B2A4D", "muted": "#6E5A82", "accent": "#B23A8A", "onAccent": "#FFFFFF", "accent2": "#9AD7FF", "onAccent2": "#3B2A4D", "accentText": "#A3307C", "border": "#F2C6DE" },
+      { "id": "acid-pop", "name": "Acid Pop", "bg": "#FFE600", "surface": "#FFFFFF", "text": "#111111", "muted": "#3A3A3A", "accent": "#111111", "onAccent": "#FFE600", "accent2": "#FF3EA5", "onAccent2": "#111111", "accentText": "#111111", "border": "#111111" },
+      { "id": "terracotta", "name": "Terracotta", "bg": "#F9EFE6", "surface": "#EFDCCB", "text": "#3E2723", "muted": "#6D4C41", "accent": "#A0522D", "onAccent": "#FFFFFF", "accent2": "#A9C38A", "onAccent2": "#1F1611", "accentText": "#8E4526", "border": "#DCC3B0" },
+      { "id": "midnight-ink", "name": "Midnight Ink", "bg": "#0B1020", "surface": "#161D33", "text": "#E6E8EF", "muted": "#A3ABBF", "accent": "#7A5C9E", "onAccent": "#FFFFFF", "accent2": "#C9CED9", "onAccent2": "#0B1020", "accentText": "#B49BD6", "border": "#2A3350" },
+      { "id": "ocean-mist", "name": "Ocean Mist", "bg": "#F3F8FA", "surface": "#DCEBF0", "text": "#23404A", "muted": "#4F6B75", "accent": "#3A7383", "onAccent": "#FFFFFF", "accent2": "#F2D7C9", "onAccent2": "#23404A", "accentText": "#2F6574", "border": "#CFE0E6" }
+    ],
+    "paletteContrastNote": "All text pairs pass WCAG AA in every palette. Text on accent uses onAccent; text on accent2 uses onAccent2; accent-coloured text uses accentText.",
+
+    "headingFonts": [
+      { "id": "libre-baskerville", "family": "Libre Baskerville", "weight": 700, "mood": "trustworthy, classic" },
+      { "id": "bricolage-grotesque", "family": "Bricolage Grotesque", "weight": 800, "mood": "chunky, startup" },
+      { "id": "pacifico", "family": "Pacifico", "weight": 400, "mood": "handwritten, homemade" },
+      { "id": "unifrakturmaguntia", "family": "UnifrakturMaguntia", "weight": 400, "mood": "gothic, dramatic" },
+      { "id": "quicksand", "family": "Quicksand", "weight": 500, "mood": "soft, rounded, calm" },
+      { "id": "bungee", "family": "Bungee", "weight": 400, "mood": "loud, retro" },
+      { "id": "playfair-display", "family": "Playfair Display", "weight": 700, "mood": "elegant, editorial" },
+      { "id": "abril-fatface", "family": "Abril Fatface", "weight": 400, "mood": "bold, fashion" },
+      { "id": "space-grotesk", "family": "Space Grotesk", "weight": 700, "mood": "techy, modern" },
+      { "id": "caveat", "family": "Caveat", "weight": 700, "mood": "scribbled, casual" }
+    ],
+    "bodyFonts": [
+      { "id": "lato", "family": "Lato", "readable": true },
+      { "id": "nunito", "family": "Nunito", "readable": true },
+      { "id": "source-serif-4", "family": "Source Serif 4", "readable": true },
+      { "id": "space-grotesk", "family": "Space Grotesk", "readable": true },
+      { "id": "cormorant-garamond", "family": "Cormorant Garamond", "readable": true },
+      { "id": "caveat", "family": "Caveat", "readable": false }
+    ],
+
+    "styles": [
+      { "id": "classic", "name": "Classic", "radiusCard": 6, "radiusButton": 6, "radiusImage": 4, "borderWidth": 1, "borderColor": "palette.border", "shadow": "0 2px 6px rgba(0,0,0,0.10)", "description": "Small radius, hairline border, light shadow" },
+      { "id": "minimal", "name": "Minimal", "radiusCard": 0, "radiusButton": 0, "radiusImage": 0, "borderWidth": 1, "borderColor": "palette.border", "shadow": "none", "description": "Square, hairlines, no shadow" },
+      { "id": "soft-rounded", "name": "Soft & Rounded", "radiusCard": 20, "radiusButton": 14, "radiusImage": 20, "borderWidth": 0, "borderColor": "palette.border", "shadow": "0 10px 30px rgba(0,0,0,0.12)", "description": "Big radius, no border, soft shadow" },
+      { "id": "neo-brutalist", "name": "Neo-Brutalist", "radiusCard": 0, "radiusButton": 0, "radiusImage": 0, "borderWidth": 3, "borderColor": "palette.text", "shadow": "6px 6px 0 palette.text", "description": "Square, thick border, hard offset shadow" },
+      { "id": "playful", "name": "Playful", "radiusCard": 24, "radiusButton": 999, "radiusImage": 28, "borderWidth": 2, "borderColor": "palette.text", "shadow": "0 5px 0 palette.accent2", "description": "Pill buttons, chunky outline, colour sticker shadow" }
+    ],
+
+    "pictures": [
+      { "id": "charts", "name": "Charts", "kind": "illustration" },
+      { "id": "office-handshake", "name": "Office handshake", "kind": "photo" },
+      { "id": "neon-blobs", "name": "Neon blobs", "kind": "illustration" },
+      { "id": "rocket-launch", "name": "Rocket launch", "kind": "illustration" },
+      { "id": "fresh-bread", "name": "Fresh bread", "kind": "photo" },
+      { "id": "croissant-and-wheat", "name": "Croissant & wheat", "kind": "illustration" },
+      { "id": "dried-bouquet", "name": "Dried bouquet", "kind": "photo" },
+      { "id": "moon-and-roses", "name": "Moon & roses", "kind": "illustration" },
+      { "id": "leaves-and-lotus", "name": "Leaves & lotus", "kind": "illustration" },
+      { "id": "calm-beach", "name": "Calm beach", "kind": "photo" },
+      { "id": "glass-skyscraper", "name": "Glass skyscraper", "kind": "photo", "decoy": true },
+      { "id": "party-balloons", "name": "Party balloons", "kind": "illustration", "decoy": true }
+    ],
+    "picturesNote": "Photo pictures are placeholders in Figma. Use real licensed photos (e.g. Adobe Stock) or keep the placeholder card. Decoys are worth 0 for everyone.",
+
+    "heroDecor": [
+      { "id": "none", "name": "None" },
+      { "id": "dots", "name": "Dots" },
+      { "id": "squiggle", "name": "Squiggle" },
+      { "id": "confetti", "name": "Confetti" },
+      { "id": "sparkles", "name": "Sparkles" }
+    ],
+    "sectionPatterns": [
+      { "id": "none", "name": "None" },
+      { "id": "dots", "name": "Dots", "css": "radial-gradient(currentColor 1.5px, transparent 1.5px) 0 0 / 16px 16px" },
+      { "id": "stripes", "name": "Stripes", "css": "repeating-linear-gradient(45deg, currentColor 0 2px, transparent 2px 14px)" },
+      { "id": "grid", "name": "Grid", "css": "linear-gradient(currentColor 1px, transparent 1px) 0 0 / 24px 24px, linear-gradient(90deg, currentColor 1px, transparent 1px) 0 0 / 24px 24px" },
+      { "id": "waves", "name": "Waves", "asset": "assets/svg/patterns/waves.svg" },
+      { "id": "checks", "name": "Checks", "css": "conic-gradient(currentColor 25%, transparent 0 50%, currentColor 0 75%, transparent 0) 0 0 / 28px 28px" }
+    ],
+    "sectionPatternsNote": "Patterns sit behind Features, Stats, Testimonial, Pricing, Team, FAQ and About at about 12% opacity in the palette's border or accent2 colour.",
+
+    "sections": [
+      { "id": "nav", "name": "Navigation", "layouts": ["simple", "centered"] },
+      { "id": "hero", "name": "Hero", "layouts": ["centered", "split", "image-background"], "usesDecor": true, "usesPicture": true },
+      { "id": "about", "name": "About", "layouts": ["image-left", "image-right"], "usesPicture": true },
+      { "id": "stats", "name": "Stats", "columns": [3, 4] },
+      { "id": "features", "name": "Features", "layouts": ["cards", "icons", "list", "bento"], "columns": { "cards": [2, 3, 4], "icons": [2, 3, 4], "list": [1], "bento": [3] } },
+      { "id": "testimonial", "name": "Testimonial", "layouts": ["single", "trio"] },
+      { "id": "gallery", "name": "Gallery", "layouts": ["grid", "mosaic"], "columns": { "grid": [1, 2, 3, 4], "mosaic": [3] }, "usesPicture": true },
+      { "id": "pricing", "name": "Pricing", "columns": [2, 3] },
+      { "id": "team", "name": "Team", "columns": [2, 3, 4] },
+      { "id": "faq", "name": "FAQ", "layouts": ["accordion"] },
+      { "id": "contact", "name": "Contact", "layouts": ["form", "hours-and-map"] },
+      { "id": "banner", "name": "Banner", "layouts": ["big-statement", "marquee", "image"] },
+      { "id": "logo-strip", "name": "Logo strip", "layouts": ["row"] },
+      { "id": "cta", "name": "Call to action", "layouts": ["band", "centered"] },
+      { "id": "footer", "name": "Footer", "layouts": ["simple", "columns"] }
+    ],
+    "sectionsNote": "On phones every multi-column section collapses to 1 column (2 for gallery/team). The player's column choice applies from 768px up."
+  },
+
+  "scoring": {
+    "max": 12,
+    "points": {
+      "palette": { "perfect": 3, "alsoWorks": 2 },
+      "headingFont": { "perfect": 2, "alsoWorks": 1 },
+      "bodyFont": { "readable": 1 },
+      "style": { "perfect": 2, "alsoWorks": 1 },
+      "pictures": { "perfect": 2, "alsoWorks": 1, "decoy": 0 },
+      "decoration": { "allFit": 1, "note": "+1 only if the hero decor AND every section pattern used are on the client's lists" },
+      "mustHave": { "onPage": 1 }
+    },
+    "outcomes": [
+      { "id": "meltdown", "rule": "any deal-breaker on the page", "label": "Meltdown", "stamp": "MELTDOWN", "stampColor": "#D72885" },
+      { "id": "happy", "min": 8, "max": 12, "label": "Happy", "stamp": "APPROVED", "stampColor": "#007A7A" },
+      { "id": "meh", "min": 4, "max": 7, "label": "Meh", "stamp": "REVISIONS", "stampColor": "#B35F00" },
+      { "id": "meltdown", "min": 0, "max": 3, "label": "Meltdown", "stamp": "MELTDOWN", "stampColor": "#D72885" }
+    ],
+    "everyonesRules": [
+      { "id": "nav-first", "breaksWhen": "Navigation is not the top section", "penalty": -1, "comment": "Where’s the menu? I’m lost on my own website." },
+      { "id": "footer-last", "breaksWhen": "Footer is not the bottom section", "penalty": -1, "comment": "Why is the footer in the middle? Is the website falling over?" },
+      { "id": "needs-hero", "breaksWhen": "No hero section", "penalty": -1, "comment": "What is this website even for?" },
+      { "id": "not-too-short", "breaksWhen": "Fewer than 6 sections", "penalty": -1, "comment": "Is that it? I’ve seen longer receipts." },
+      { "id": "not-too-long", "breaksWhen": "More than 13 sections", "penalty": -1, "comment": "I scrolled so long I needed a snack." },
+      { "id": "readable-body", "breaksWhen": "Body font is Caveat", "penalty": -1, "comment": "I need my glasses for this. All of them." },
+      { "id": "dont-overdecorate", "breaksWhen": "Confetti or Sparkles together with Checks or Stripes", "penalty": -1, "comment": "My eyes! Everything is happening at once!" },
+      { "id": "dont-repeat", "breaksWhen": "Same section type 3 times in a row", "penalty": -1, "comment": "Didn’t I just see this? And this? And this?" }
+    ],
+    "rulesNote": "Score never goes below 0. Each broken rule triggers its comment once (as a live bubble)."
+  },
+
+  "happinessMeter": {
+    "happy": { "range": [8, 12], "color": "#00ABAB" },
+    "meh": { "range": [4, 7], "color": "#F7941E" },
+    "meltdown": { "range": [0, 3], "color": "#D72885" },
+    "dealBreaker": { "label": "Deal-breaker!", "color": "#000000", "note": "Bar drops to 0, face goes to meltdown, recovers when removed" }
+  },
+
+  "clients": [
+    {
+      "id": "gerald",
+      "name": "Gerald Ledgerby",
+      "age": 61,
+      "role": "Tax accountant",
+      "business": "Ledgerby Tax & Accounting",
+      "personality": "Has ironed his socks. Owns three calculators and has given each of them a name.",
+      "picky": 2,
+      "color": "#8FB8E8",
+      "brief": "My clients trust me with their money. I’d like a website that makes them feel… calm. Nothing should move. Nothing should sparkle. Last year someone sent me an emoji and I had to lie down.",
+      "wishlist": {
+        "palette": { "perfect": "navy-ledger", "alsoWorks": ["ocean-mist"] },
+        "headingFont": { "perfect": "libre-baskerville", "alsoWorks": ["playfair-display"] },
+        "style": { "perfect": "classic", "alsoWorks": ["minimal"] },
+        "pictures": { "perfect": "charts", "alsoWorks": ["office-handshake"] },
+        "decoration": { "heroDecor": ["none"], "patterns": ["none", "grid", "stripes"] },
+        "mustHave": "testimonial"
+      },
+      "dealBreakers": { "palettes": ["neon-pop", "candy-pastel", "acid-pop"], "headingFonts": ["bungee", "pacifico", "caveat"], "styles": ["playful"], "heroDecor": ["confetti", "sparkles"], "pictures": [] },
+      "sectionsTheyLove": ["stats", "pricing", "faq", "contact"],
+      "lesson": "Serif type and navy read as established and trustworthy. That is why banks and law firms use them. Neon and sparkles say “fun”, not “safe with your money”.",
+      "site": {
+        "nav": { "logo": "Ledgerby Tax", "links": ["About", "Services", "Contact"], "button": "Book" },
+        "hero": { "eyebrow": "Est. 1994", "title": "Your taxes, handled precisely", "body": "Thirty-one years of accurate returns and absolutely zero surprises.", "button": "Book a consultation" },
+        "stats": { "title": "Thirty-one years in numbers", "items": [["31", "years in practice"], ["4,812", "returns filed"], ["0", "audits lost"], ["100%", "on time"]] },
+        "features": { "title": "How I can help", "items": [["Personal tax returns", "Filed on time, every time, triple-checked."], ["Small business books", "Monthly bookkeeping without the drama."], ["Audit support", "I bring the binders. You bring the coffee."]] },
+        "testimonial": { "quotes": [["Gerald found $412 I didn’t know I had. I cried a little, in a good way.", "Margaret, client since 1998"]] },
+        "pricing": { "title": "Simple, honest fees", "plans": [["Personal", "$149", "/ return", ["One personal return", "Email support", "Triple-checked"]], ["Small business", "$399", "/ year", ["Monthly bookkeeping", "Quarterly check-ins", "Priority replies"]], ["Full service", "$899", "/ year", ["Everything in Small business", "Audit support", "A very tidy binder"]]] },
+        "faq": { "title": "Questions, answered", "items": [["What do I need to bring?", "Last year’s return, your slips and any receipts. I’ll send a checklist."], ["Do you work weekends?", "No. Weekends are for alphabetising."], ["Can you help with last year’s return?", "Yes, and the year before. I enjoy that sort of thing."], ["Do you accept receipts in a shoebox?", "I do. I don’t enjoy it, but I do."]] },
+        "contact": { "title": "Book a consultation", "body": "Tell me what you need and I’ll reply within one business day.", "email": "gerald@ledgerby-tax.ca", "address": "21 Ledger Lane, Suite 3" },
+        "cta": { "title": "Calm taxes start here.", "button": "Book a consultation" },
+        "about": { "eyebrow": "About", "title": "Thirty-one years of tidy books", "body": "I started Ledgerby Tax with one desk and three calculators. I still have all three." },
+        "team": { "title": "Who you’ll work with", "people": [["Gerald Ledgerby", "Founder, accountant"], ["Margaret", "Office manager, keeper of binders"]] },
+        "gallery": { "title": "The office" },
+        "banner": { "statement": "Precise. Punctual. Pleasantly boring." },
+        "logoStrip": { "label": "Trusted by", "logos": ["Main St Dental", "Oak & Co", "Riverside Bakery", "North Shore Vets"] },
+        "footer": { "logo": "Ledgerby Tax", "note": "© 2026 Ledgerby Tax & Accounting. Weekdays 9–5, never on weekends." }
+      },
+      "lines": {
+        "happy": ["This is… orderly. I may frame it. Next to my other framed spreadsheet.", "Balanced, like a good ledger. I’m experiencing what young people call “a vibe”.", "My clients will trust this. I trust this. I’m emailing my mother."],
+        "meh": ["It’s fine. Like a tie that’s slightly too wide. I’ll live.", "It mostly adds up. There’s a rounding error somewhere and it’s bothering me.", "Acceptable. Not deductible, but acceptable."],
+        "meltdown": ["Why is it SPARKLING? My glasses just fogged up.", "This website owes me an apology and possibly back taxes.", "I need a quiet room, a pencil and a glass of room-temperature water."],
+        "timesUp": "Late? I have never filed anything late in thirty-one years.",
+        "hurry": "Thirty seconds. I’m getting my calculator out.",
+        "triggers": {
+          "perfectPalette": "Navy. The colour of reliable socks. Go on.",
+          "dealBreakerPalette": "Is my screen broken or is this… pink?",
+          "perfectHeading": "A serif! Finally, a font with a pension plan.",
+          "dealBreakerHeading": "That font looks like it would bounce a cheque.",
+          "perfectStyle": "Neat edges. Tidy borders. I feel audited in a good way.",
+          "perfectPictures": "Charts. Be still, my heart.",
+          "decoyPicture": "Who chose this picture? It isn’t itemised.",
+          "dealBreakerDecoration": "Is something… celebrating? Make it stop.",
+          "mustHaveAdded": "Ah, Margaret’s review. She’s very thorough."
+        }
+      }
+    },
+    {
+      "id": "kaia",
+      "name": "Kaia Zoom",
+      "age": 24,
+      "role": "Startup founder",
+      "business": "Leafr, a dating app, but for ferns",
+      "personality": "Has pivoted four times this week. Says “disrupt” the way other people say “hello”.",
+      "picky": 3,
+      "color": "#B8FF2E",
+      "brief": "Okay so Leafr matches houseplants with their soulmates. We’re pre-revenue but post-vibes. The site has to feel LOUD. If it looks like a bank, investors fall asleep, and honestly that’s on you.",
+      "wishlist": {
+        "palette": { "perfect": "neon-pop", "alsoWorks": ["acid-pop"] },
+        "headingFont": { "perfect": "bricolage-grotesque", "alsoWorks": ["bungee", "space-grotesk"] },
+        "style": { "perfect": "neo-brutalist", "alsoWorks": ["playful"] },
+        "pictures": { "perfect": "neon-blobs", "alsoWorks": ["rocket-launch"] },
+        "decoration": { "heroDecor": ["sparkles", "confetti"], "patterns": ["dots", "grid", "checks"] },
+        "mustHave": "cta"
+      },
+      "dealBreakers": { "palettes": ["navy-ledger", "calm-sage"], "headingFonts": ["libre-baskerville", "unifrakturmaguntia"], "styles": [], "heroDecor": [], "pictures": [] },
+      "sectionsTheyLove": ["stats", "logo-strip", "banner", "pricing"],
+      "lesson": "Saturated colour on a dark background and chunky sans-serifs feel young and energetic. Classic serifs signal tradition, the opposite of a startup pitch.",
+      "site": {
+        "nav": { "logo": "Leafr", "links": ["Features", "Pricing", "Download"], "button": "Get the app" },
+        "hero": { "eyebrow": "Now in beta", "title": "Swipe right on houseplants", "body": "The dating app that finally matches you with a fern that gets you.", "button": "Join the waitlist" },
+        "banner": { "marquee": "SWIPE ✦ MATCH ✦ GROW ✦", "statement": "Love, but make it photosynthesis." },
+        "features": { "title": "Why Leafr?", "items": [["Smart matching", "Our algorithm knows your light levels, your watering habits and your vibe."], ["Plant profiles", "Every succulent has a bio."], ["Zero commitment", "Ghost a cactus. It won’t text back."]] },
+        "stats": { "title": "Early traction", "items": [["12k", "plants matched"], ["98%", "ferns satisfied"], ["0", "cacti ghosted"], ["4", "pivots this week"]] },
+        "gallery": { "title": "Gallery" },
+        "logoStrip": { "label": "As seen in", "logos": ["PlantCrunch", "GROW WEEKLY", "Leaf Daily", "startup.fm", "POT NEWS"] },
+        "testimonial": { "title": "Plant parents say", "quotes": [["I matched with a monstera and we’re moving in together.", "Jordan, early adopter"], ["My snake plant finally feels understood.", "Priya, beta tester"], ["Better than my last three apps combined.", "Max, serial swiper"]] },
+        "cta": { "title": "Find your plant soulmate.", "button": "Join the waitlist" },
+        "pricing": { "title": "Pick your plan", "plans": [["Seedling", "$0", "/ month", ["5 swipes a day", "Basic plant profiles", "Community garden"]], ["Bloom", "$9", "/ month", ["Unlimited swipes", "See who watered you", "Priority matching"]], ["Jungle", "$29", "/ month", ["Everything in Bloom", "Rare plant access", "A tiny hat for your cactus"]]] },
+        "about": { "eyebrow": "Our story", "title": "Founded in a greenhouse at 3am", "body": "Kaia was lonely. Her fern was lonely. The rest is history (and a pitch deck)." },
+        "team": { "title": "The team", "people": [["Kaia Zoom", "Founder, chief vibe officer"], ["Fernando", "Co-founder, literally a fern"]] },
+        "faq": { "title": "FAQ", "items": [["Is this real?", "Emotionally, yes."], ["Do plants consent?", "They lean towards the light. We take that as a yes."]] },
+        "contact": { "title": "Say hi", "body": "Investors, plant parents, curious cacti: we read everything.", "email": "hello@leafr.app", "address": "Somewhere with good light" },
+        "footer": { "logo": "Leafr", "note": "© 2026 Leafr Inc. Pre-revenue, post-vibes." }
+      },
+      "lines": {
+        "happy": ["OBSESSED. This is going in the pitch deck. You’re getting equity. (You’re not getting equity.)", "This slaps. My co-founder is crying. Okay, he cries a lot, but still.", "Ten out of ten. Disruptive. Iconic. Already posted it."],
+        "meh": ["It’s giving… Tuesday. Can it be more Friday?", "Cute! In a “my aunt made a website” kind of way.", "Solid MVP. Emphasis on minimum."],
+        "meltdown": ["Is this a PDF from 2009? My investors just unfollowed me.", "This looks like a bank. I’d rather pivot to selling candles.", "I’m literally shaking. Not in a good way. In a “call my therapist” way."],
+        "timesUp": "Missed the deadline? Honestly, very on-brand for a startup.",
+        "hurry": "Thirty seconds! That’s like three pivots!",
+        "triggers": {
+          "perfectPalette": "NEON. Yes. My retinas and I approve.",
+          "dealBreakerPalette": "Navy? Are we filing taxes or changing the world?",
+          "perfectHeading": "Chunky font energy. Love that for us.",
+          "dealBreakerHeading": "That font has a mortgage and a minivan.",
+          "perfectStyle": "Thick borders, hard shadows. It looks like it lifts.",
+          "perfectPictures": "Blobs! Abstract! Investors LOVE blobs.",
+          "decoyPicture": "Is that a stock photo? I can smell the stock photo.",
+          "noDecoration": "No sparkles? Where’s the drama?",
+          "mustHaveAdded": "A big button! People love clicking big buttons."
+        }
+      }
+    },
+    {
+      "id": "rosa",
+      "name": "Rosa Moretti",
+      "age": 45,
+      "role": "Bakery owner",
+      "business": "Rosa’s Bakery",
+      "personality": "Feeds everyone who walks in. Has never used a measuring cup. Guards her nonna’s recipes like state secrets.",
+      "picky": 2,
+      "color": "#F6B38E",
+      "brief": "My kids say I need a website. Fine. It should feel like my kitchen: warm, cozy, smells like fresh bread. Show the bread! If it looks like a hospital, I’m calling your mother.",
+      "wishlist": {
+        "palette": { "perfect": "warm-bakery", "alsoWorks": ["terracotta"] },
+        "headingFont": { "perfect": "pacifico", "alsoWorks": ["caveat"] },
+        "style": { "perfect": "soft-rounded", "alsoWorks": ["playful"] },
+        "pictures": { "perfect": "fresh-bread", "alsoWorks": ["croissant-and-wheat"] },
+        "decoration": { "heroDecor": ["dots"], "patterns": ["none", "checks", "stripes"] },
+        "mustHave": "gallery"
+      },
+      "dealBreakers": { "palettes": ["neon-pop", "dark-romance", "midnight-ink"], "headingFonts": ["bungee", "unifrakturmaguntia"], "styles": [], "heroDecor": [], "pictures": ["glass-skyscraper"] },
+      "sectionsTheyLove": ["about", "pricing", "contact", "banner"],
+      "lesson": "Warm hues (reds, creams, golds) feel inviting and homemade, and a script font feels handwritten. Cool or dark palettes feel clinical or cold.",
+      "site": {
+        "nav": { "logo": "Rosa’s Bakery", "links": ["Menu", "Our story", "Visit us"], "button": "Order" },
+        "hero": { "eyebrow": "Since Nonna said so", "title": "Fresh from the oven", "body": "Bread, biscotti and unsolicited life advice, every morning at seven.", "button": "See today’s bread" },
+        "about": { "eyebrow": "Our story", "title": "Nonna’s recipes, Rosa’s rules", "body": "Every loaf starts with my grandmother’s handwritten recipes and a lot of patience. No shortcuts, no measuring cups, plenty of love.", "button": "Meet Rosa" },
+        "features": { "title": "Baked today", "items": [["Sourdough", "Thirty-six hours and a lot of love."], ["Biscotti", "Twice baked. Never once regretted."], ["Celebration cakes", "Order ahead. Nonna’s recipe."]] },
+        "gallery": { "title": "Fresh this morning" },
+        "pricing": { "title": "Today’s favourites", "plans": [["Sourdough loaf", "$8", "/ loaf", ["36-hour ferment", "Crackly crust", "Still warm before 9"]], ["Biscotti box", "$14", "/ dozen", ["Almond and anise", "Twice baked", "For dunking"]], ["Party cake", "$45", "/ cake", ["Order 2 days ahead", "Nonna’s recipe", "Candles on request"]]] },
+        "testimonial": { "quotes": [["Rosa told me I looked tired and gave me a free cannoli. Five stars.", "Dave, regular since Tuesday"]] },
+        "banner": { "statement": "Come hungry. Leave happy. Bring a friend." },
+        "contact": { "title": "Come visit", "hours": [["Tue – Sat", "7:00 – until the bread runs out"], ["Sunday", "8:00 – 13:00"], ["Monday", "Closed (Rosa sleeps)"]], "address": "14 Flour Street" },
+        "stats": { "title": "Every week", "items": [["600", "loaves baked"], ["3", "generations of recipes"], ["0", "measuring cups"]] },
+        "team": { "title": "In the kitchen", "people": [["Rosa Moretti", "Owner, head baker"], ["Nonna", "Recipe consultant (in spirit)"]] },
+        "faq": { "title": "Questions", "items": [["Do you have gluten-free bread?", "Saturdays only. Come early."], ["Can I get the sourdough recipe?", "No. But I’ll show you how to knead."]] },
+        "cta": { "title": "Order a cake for Saturday", "button": "Call the bakery" },
+        "logoStrip": { "label": "Our flour comes from", "logos": ["Valley Mill", "Golden Wheat", "Farm & Co"] },
+        "footer": { "logo": "Rosa’s Bakery", "note": "© 2026 Rosa’s Bakery. Open 7am until the bread runs out." }
+      },
+      "lines": {
+        "happy": ["Bellissimo! You’re too skinny. Sit, I’m bringing biscotti.", "It smells like bread. I don’t know how, but it smells like bread.", "My nonna would approve, and she approved of nothing."],
+        "meh": ["Is nice. A little like store-bought bread. Edible, but I notice.", "It’s okay. Like soup with no salt. I see you tried.", "Good, but where is the bread? People come for the bread!"],
+        "meltdown": ["Madonna mia, why is it so DARK? Who died? Open a window!", "This looks like a nightclub. I close at six!", "I’m calling your mother. Right now. What’s her number?"],
+        "timesUp": "Late? My dough rises faster than you work!",
+        "hurry": "Hurry, the cornetti are getting cold!",
+        "triggers": {
+          "perfectPalette": "Warm, like my oven. Now we’re cooking.",
+          "dealBreakerPalette": "Why is it so cold? Put a sweater on this website.",
+          "perfectHeading": "Ooh, curly letters. Like my icing!",
+          "dealBreakerHeading": "That font looks like it has never eaten a carb.",
+          "perfectStyle": "Soft and round, like a good loaf.",
+          "perfectPictures": "The bread! Finally somebody listens.",
+          "decoyPicture": "A skyscraper? Is my bakery a bank now?",
+          "nicePattern": "Checks! Like my tablecloth!",
+          "mustHaveAdded": "Show all the bread. ALL of it."
+        }
+      }
+    },
+    {
+      "id": "damien",
+      "name": "Damien Nightshade",
+      "age": 32,
+      "role": "Goth florist",
+      "business": "Wilted & Co., dried and dramatic flowers",
+      "personality": "Wears black in July. Finds sunshine “a bit much”. Secretly the sweetest person on this list.",
+      "picky": 4,
+      "color": "#5B2A4A",
+      "onColor": "#FFFFFF",
+      "brief": "Wilted & Co. sells flowers that have accepted their fate. The site must feel like a candlelit parlour at midnight. Show the bouquets. If I see pastel, I will simply… fade away.",
+      "wishlist": {
+        "palette": { "perfect": "dark-romance", "alsoWorks": ["midnight-ink"] },
+        "headingFont": { "perfect": "unifrakturmaguntia", "alsoWorks": ["playfair-display", "abril-fatface"] },
+        "style": { "perfect": "minimal", "alsoWorks": ["classic"] },
+        "pictures": { "perfect": "dried-bouquet", "alsoWorks": ["moon-and-roses"] },
+        "decoration": { "heroDecor": ["none", "squiggle"], "patterns": ["none", "stripes"] },
+        "mustHave": "gallery"
+      },
+      "dealBreakers": { "palettes": ["candy-pastel", "acid-pop"], "headingFonts": ["pacifico", "quicksand", "bungee"], "styles": ["playful"], "heroDecor": ["confetti"], "pictures": ["party-balloons"] },
+      "sectionsTheyLove": ["about", "banner", "contact"],
+      "lesson": "Dark palettes with deep reds create drama and a sense of luxury, and blackletter type carries centuries of gothic mood. Pastels break the spell instantly.",
+      "site": {
+        "nav": { "logo": "Wilted & Co.", "links": ["Bouquets", "Workshops", "Visit"], "button": "Order" },
+        "hero": { "eyebrow": "Est. at midnight", "title": "Flowers that have accepted their fate", "body": "Dried, pressed and dramatic arrangements for weddings, funerals and Tuesdays.", "button": "Shop bouquets" },
+        "banner": { "statement": "Beauty fades. Ours already has." },
+        "gallery": { "title": "Recent arrangements" },
+        "about": { "eyebrow": "The florist", "title": "Damien, keeper of petals", "body": "I started drying flowers because I couldn’t bear to throw them away. Now every bouquet gets a second, darker, more interesting life.", "button": "Read more" },
+        "features": { "title": "What we offer", "items": [["Dried bouquets", "They’ll outlive your houseplants."], ["Pressed frames", "Petals preserved forever. Like regret."], ["Candlelit workshops", "Learn to arrange by candlelight."]] },
+        "testimonial": { "quotes": [["My bouquet was so beautifully gloomy, the wedding guests wept. In a good way.", "Raven, very happy bride"]] },
+        "contact": { "title": "Visit the shop", "hours": [["Wed – Sat", "16:00 – midnight"], ["Sunday", "By candlelight only"], ["Mon – Tue", "Closed (brooding)"]], "address": "13 Raven Row" },
+        "pricing": { "title": "Arrangements", "plans": [["Small sorrow", "$35", "/ bouquet", ["Dried roses", "Black ribbon", "A sigh"]], ["Grand lament", "$90", "/ bouquet", ["Seasonal dried blooms", "Velvet wrap", "Hand-written card"]]] },
+        "stats": { "title": "By the numbers", "items": [["13", "shades of black"], ["0", "sunflowers sold"], ["∞", "petals preserved"]] },
+        "team": { "title": "The shop", "people": [["Damien Nightshade", "Florist"], ["Morticia", "Shop raven"]] },
+        "faq": { "title": "Questions", "items": [["Do you sell fresh flowers?", "Briefly."], ["Do you deliver?", "After dark."]] },
+        "cta": { "title": "Order something beautifully sad", "button": "Shop bouquets" },
+        "logoStrip": { "label": "As mourned in", "logos": ["Gothic Weekly", "Velvet Mag", "Midnight Post"] },
+        "footer": { "logo": "Wilted & Co.", "note": "© 2026 Wilted & Co. Open late. Obviously." }
+      },
+      "lines": {
+        "happy": ["Exquisitely gloomy. I shed a single tear. It was perfect.", "Like a candle in a dark room. I’ve never felt so seen.", "I would be buried in this website. Respectfully."],
+        "meh": ["It’s dark, but dark like a car park. Not dark like a poem.", "Mildly melancholy. I wanted devastating.", "Fine. It’s the beige of black."],
+        "meltdown": ["Pink? CONFETTI? I’ve never been so personally attacked by a website.", "This is so cheerful my eyeliner is running.", "Who invited balloons to my funeral? I mean shop."],
+        "timesUp": "Ah. The Deadline. We’ve met before.",
+        "hurry": "Thirty seconds. Time is fleeting. Like petals.",
+        "triggers": {
+          "perfectPalette": "Darkness. Velvet. Yes.",
+          "dealBreakerPalette": "Pastels?! I’m fading… I’m fading…",
+          "perfectHeading": "Blackletter. Finally, a font that understands me.",
+          "dealBreakerHeading": "That font smiles too much.",
+          "perfectStyle": "Clean, sharp, quiet. Like a well-kept crypt.",
+          "perfectPictures": "Dried flowers. They’ve accepted their fate. As have I.",
+          "decoyPicture": "Balloons. In my shop. I need to lie down.",
+          "dealBreakerDecoration": "Confetti is just glitter’s annoying cousin.",
+          "mustHaveAdded": "Show the bouquets, in all their withered glory."
+        }
+      }
+    },
+    {
+      "id": "brenda",
+      "name": "Brenda Bloom",
+      "age": 35,
+      "role": "Wellness coach",
+      "business": "Breathe with Brenda",
+      "personality": "Speaks only in a calm whisper. Has a different tea for every emotion.",
+      "picky": 3,
+      "color": "#E8C8B8",
+      "brief": "Breathe in… my clients come to me to slow down. The website should feel like a long exhale: soft, natural, lots of space to list my sessions. Breathe out… and please, no shouting fonts.",
+      "wishlist": {
+        "palette": { "perfect": "calm-sage", "alsoWorks": ["ocean-mist"] },
+        "headingFont": { "perfect": "quicksand", "alsoWorks": ["playfair-display"] },
+        "style": { "perfect": "soft-rounded", "alsoWorks": ["minimal"] },
+        "pictures": { "perfect": "leaves-and-lotus", "alsoWorks": ["calm-beach"] },
+        "decoration": { "heroDecor": ["squiggle", "none"], "patterns": ["none", "waves"] },
+        "mustHave": "features"
+      },
+      "dealBreakers": { "palettes": ["neon-pop", "acid-pop"], "headingFonts": ["bungee", "bricolage-grotesque"], "styles": ["neo-brutalist"], "heroDecor": ["confetti"], "pictures": [] },
+      "sectionsTheyLove": ["pricing", "team", "faq", "banner"],
+      "lesson": "Muted greens and generous white space slow the eye down, and rounded, light type feels gentle. Loud fonts and confetti raise the energy, the opposite of calm.",
+      "site": {
+        "nav": { "logo": "Breathe with Brenda", "links": ["Sessions", "Retreats", "About"], "button": "Book" },
+        "hero": { "eyebrow": "Breathe in", "title": "Slow down. You’re doing great.", "body": "Gentle breathwork and yoga sessions to help you exhale the week.", "button": "Book a session" },
+        "features": { "title": "Sessions", "items": [["Morning breathwork", "Ten minutes that change your whole day."], ["Gentle yoga", "No pretzels. Just stretching."], ["Weekend retreats", "Phones off. Tea on."]] },
+        "banner": { "statement": "Inhale. Exhale. Repeat." },
+        "pricing": { "title": "Gentle prices", "plans": [["Drop-in", "$22", "/ class", ["Any class, any day", "Mat and tea included", "No commitment"]], ["Monthly calm", "$120", "/ month", ["Unlimited classes", "One private session", "A tea for every emotion"]]] },
+        "team": { "title": "Who you’ll breathe with", "people": [["Brenda Bloom", "Breathwork coach"], ["Mochi", "Studio cat, chief napper"]] },
+        "testimonial": { "quotes": [["I came in stressed and left so relaxed I forgot where I parked.", "Priya, client"]] },
+        "faq": { "title": "Gentle questions", "items": [["I’ve never done yoga. Is that okay?", "Absolutely. Every session starts with the basics, at your own pace."], ["What should I bring?", "Comfy clothes. We have mats, blankets and too much tea."], ["Can I just come for the tea?", "Yes. Breathing is optional but encouraged."], ["Is the cat always there?", "Mochi decides."]] },
+        "cta": { "title": "Your exhale is waiting.", "body": "First session is on us. Bring yourself, we’ll bring the tea.", "button": "Book a session" },
+        "about": { "eyebrow": "About", "title": "Hi, I’m Brenda", "body": "I teach people to slow down, one breath at a time." },
+        "stats": { "title": "Gently counted", "items": [["2,000+", "breaths guided"], ["40", "kinds of tea"], ["1", "very calm cat"]] },
+        "contact": { "title": "Visit the studio", "hours": [["Mon – Fri", "7:00 – 19:00"], ["Weekends", "Retreats only"]], "address": "8 Willow Lane" },
+        "logoStrip": { "label": "Featured in", "logos": ["Calm Weekly", "Breathe Mag", "Slow Living"] },
+        "footer": { "logo": "Breathe with Brenda", "note": "© 2026 Breathe with Brenda. Inhale, exhale, repeat." }
+      },
+      "lines": {
+        "happy": ["Ahh. I can feel my shoulders dropping. This website is a hug.", "Breathe in… breathe out… perfect. Namaste, little website.", "This is so calm my tea brewed itself."],
+        "meh": ["It’s… nice. My breathing is steady, but my aura is beige.", "Almost zen. Zen-ish.", "I’m calm. Mostly. A little bit of my chakra is frowning."],
+        "meltdown": ["Too. Much. Going. On. My chakras are tightening.", "This font is shouting at me. Why is it shouting?", "I need a retreat from this website. A long one."],
+        "timesUp": "Rushing is the enemy of peace. And of good websites.",
+        "hurry": "Thirty seconds. Breathe. Then hurry.",
+        "triggers": {
+          "perfectPalette": "Sage green. My plants and I feel safe.",
+          "dealBreakerPalette": "These colours are yelling. Ask them to use their inside voice.",
+          "perfectHeading": "Soft, round letters. Like a pillow.",
+          "dealBreakerHeading": "That font just did a cartwheel in my meditation room.",
+          "perfectStyle": "Rounded corners. No sharp edges in my life, please.",
+          "perfectPictures": "Lotus flowers. I’m breathing deeper already.",
+          "decoyPicture": "A skyscraper? I come here to escape those.",
+          "dealBreakerDecoration": "Confetti? In this economy? In this aura?",
+          "mustHaveAdded": "Yes, list my sessions. Gently."
+        }
+      }
+    }
+  ],
+
+  "deadline": {
+    "name": "The Deadline",
+    "description": "A friendly grim reaper with a scythe and an alarm clock. Appears when the timer hits 0:00 and sends the website exactly as it is.",
+    "lines": ["Pencils down. I’ll take it from here."]
+  },
+
+  "share": {
+    "size": [1080, 1080],
+    "headline": "I made {client} {outcomeVerb} in {time}",
+    "outcomeVerbs": { "happy": "happy", "meh": "shrug", "meltdown": "melt down" },
+    "subs": { "happy": "Think you can beat my time?", "meh": "So close. Your turn.", "meltdown": "Turns out clients have feelings." },
+    "footer": "designformation.ca"
+  },
+
+  "stats": {
+    "privacy": "Anonymous. No names, emails or personal data. One row per event.",
+    "events": {
+      "game_started": ["timestamp", "device"],
+      "client_picked": ["client"],
+      "choice_changed": ["category", "value"],
+      "section_changed": ["action", "section", "layout", "columns"],
+      "website_sent": ["client", "score", "outcome", "timeLeft", "autoSent", "dealBreakersHit"],
+      "program_clicked": ["program", "target"],
+      "shared": ["method"]
+    }
+  }
+}

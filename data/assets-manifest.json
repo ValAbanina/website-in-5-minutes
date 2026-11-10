@@ -1,0 +1,133 @@
+{
+  "note": "Figma node IDs for every asset. scripts/export-figma-assets.mjs downloads them using FIGMA_TOKEN from .env. Cursor's Figma MCP can also export any of these by node ID.",
+  "fileKey": "6NPkrb0UeMPWLPTQtNXFcc",
+  "svg": {
+    "characters": {
+      "gerald-neutral": "7:31",
+      "gerald-happy": "7:62",
+      "gerald-meh": "7:92",
+      "gerald-meltdown": "7:126",
+      "kaia-neutral": "7:149",
+      "kaia-happy": "7:172",
+      "kaia-meh": "7:194",
+      "kaia-meltdown": "7:220",
+      "rosa-neutral": "7:252",
+      "rosa-happy": "7:284",
+      "rosa-meh": "7:315",
+      "rosa-meltdown": "7:350",
+      "damien-neutral": "7:375",
+      "damien-happy": "7:400",
+      "damien-meh": "7:424",
+      "damien-meltdown": "7:452",
+      "brenda-neutral": "7:489",
+      "brenda-happy": "7:528",
+      "brenda-meh": "7:566",
+      "brenda-meltdown": "7:608",
+      "deadline": "50:973"
+    },
+    "pictures": {
+      "charts": "30:350",
+      "office-handshake": "30:359",
+      "neon-blobs": "30:365",
+      "rocket-launch": "30:372",
+      "fresh-bread": "30:381",
+      "croissant-and-wheat": "30:387",
+      "dried-bouquet": "30:399",
+      "moon-and-roses": "30:405",
+      "leaves-and-lotus": "30:419",
+      "calm-beach": "30:427",
+      "glass-skyscraper": "30:433",
+      "party-balloons": "30:439"
+    },
+    "patterns": {
+      "waves": "30:343",
+      "dots": "30:334",
+      "stripes": "30:337",
+      "grid": "30:340",
+      "checks": "30:346"
+    },
+    "decor": {
+      "dots": "5:104",
+      "squiggle": "5:114",
+      "confetti": "5:118",
+      "sparkles": "5:132"
+    },
+    "logos": {
+      "df-on-dark": "24:319",
+      "dgmd-on-dark": "24:398",
+      "aiap-on-dark": "24:428",
+      "df-on-light": "60:2945",
+      "dgmd-on-light": "60:2965",
+      "aiap-on-light": "60:2993"
+    }
+  },
+  "png": {
+    "screens/desktop": {
+      "00-attract-loop": "80:4420",
+      "01-start": "62:2941",
+      "01b-how-to-play": "79:4063",
+      "02-pick-a-client": "61:2704",
+      "03-brief-gerald": "67:3499",
+      "04a-builder-colour-gerald": "42:1203",
+      "04b-builder-type": "48:1324",
+      "04c-builder-style": "48:1866",
+      "04d-builder-images": "48:2348",
+      "04e-builder-decor": "48:3024",
+      "04f-times-up-gerald": "78:3658",
+      "05a-verdict-happy-gerald": "66:3264",
+      "05s-share-card-gerald": "81:4601",
+      "06-learn-more": "77:3576"
+    },
+    "screens/desktop/kaia": {
+      "03-brief": "103:8658",
+      "04a-builder": "103:5373",
+      "04f-times-up": "103:9596",
+      "05c-verdict-meltdown": "66:3535",
+      "05s-share-card": "81:4665"
+    },
+    "screens/desktop/rosa": {
+      "03-brief": "103:8783",
+      "04a-builder": "103:6045",
+      "04f-times-up": "103:9849",
+      "05b-verdict-meh": "66:3397",
+      "05s-share-card": "103:12119"
+    },
+    "screens/desktop/damien": {
+      "03-brief": "103:8921",
+      "04a-builder": "103:6949",
+      "04f-times-up": "103:10128",
+      "05d-verdict-happy": "103:9194",
+      "05s-share-card": "103:12218"
+    },
+    "screens/desktop/brenda": {
+      "03-brief": "103:9050",
+      "04a-builder": "103:7800",
+      "04f-times-up": "103:10388",
+      "05e-verdict-meh": "103:9384",
+      "05s-share-card": "103:12309"
+    },
+    "screens/mobile": {
+      "01-start": "83:157",
+      "01b-how-to-play": "89:2013",
+      "02-pick": "83:355",
+      "03-brief": "83:662",
+      "04-builder-sheet": "84:671",
+      "04f-times-up": "85:910",
+      "05-verdict": "85:763",
+      "06-learn-more": "86:965",
+      "03-brief-damien-dark": "103:14152",
+      "05-verdict-damien-dark": "103:14270"
+    },
+    "screens/tablet": {
+      "01-start": "87:1045",
+      "02-pick": "87:1247",
+      "03-brief": "89:1735",
+      "04-builder": "88:1481",
+      "05-verdict": "89:1858"
+    },
+    "reference": {
+      "motion-and-sound": "70:156",
+      "website-kit-styles": "38:459"
+    }
+  }
+}

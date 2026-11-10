@@ -1,0 +1,9 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# system / editor
+.DS_Store
+node_modules/
+*.log

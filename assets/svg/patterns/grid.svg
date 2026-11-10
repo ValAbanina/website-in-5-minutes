@@ -1,0 +1,20 @@
+<svg width="720" height="400" viewBox="0 0 720 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<g id="Pattern">
+
+
+<g id="Pattern=Grid" clip-path="url(#clip0_3_4)">
+<g id="Grid" opacity="0.35" clip-path="url(#clip1_3_4)">
+<path id="Vector" d="M40 0V400M80 0V400M120 0V400M160 0V400M200 0V400M240 0V400M280 0V400M320 0V400M360 0V400M400 0V400M440 0V400M480 0V400M520 0V400M560 0V400M600 0V400M640 0V400M680 0V400M0 40H720M0 80H720M0 120H720M0 160H720M0 200H720M0 240H720M0 280H720M0 320H720M0 360H720M0 0V400H720V0H0Z" stroke="#8FB8E8" stroke-width="1.5"/>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_3_4">
+<rect width="720" height="400" fill="white"/>
+</clipPath>
+<clipPath id="clip1_3_4">
+<rect width="720" height="400" fill="white"/>
+</clipPath>
+</defs>
+</svg>

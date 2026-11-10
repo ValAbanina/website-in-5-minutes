@@ -1,0 +1,15 @@
+{
+  "name": "website-in-5-minutes",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A five-minute design game for Langara Design Formation. Static site for GitHub Pages.",
+  "type": "module",
+  "engines": { "node": ">=20.12" },
+  "scripts": {
+    "assets": "node scripts/export-figma-assets.mjs",
+    "audio:check": "node scripts/generate-audio.mjs --dry-run",
+    "audio": "node scripts/generate-audio.mjs",
+    "dev": "npx --yes serve . -l 5173",
+    "test": "node tests/scoring.test.mjs"
+  }
+}

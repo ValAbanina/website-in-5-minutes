@@ -1,0 +1,40 @@
+{
+  "note": "Sound cue IDs used by the game. 'prompt' is what scripts/generate-audio.mjs sends to ElevenLabs Sound Effects. Volumes are suggested mix levels (gain in dB relative to full scale). Every cue has a visual twin in the UI, so the game works muted.",
+  "mixing": {
+    "startAfterFirstTap": true,
+    "duckMusicUnderVoiceDb": -8,
+    "duckReleaseMs": 300,
+    "oneVoiceAtATime": true,
+    "voiceCrossfadeMs": 100,
+    "muteResetsAtAttractLoop": true
+  },
+  "cues": [
+    { "id": "ui.click", "channel": "ui", "gainDb": -18, "duration": 0.5, "prompt": "Soft rubbery button tap, short, dry, friendly UI click, no reverb" },
+    { "id": "ui.toggle", "channel": "ui", "gainDb": -18, "duration": 0.5, "prompt": "Two-note bip-bop going up, cute toggle switch sound, short" },
+    { "id": "ui.hover-soft", "channel": "ui", "gainDb": -24, "duration": 0.5, "prompt": "Tiny wooden tick, very short and quiet, UI hover" },
+    { "id": "ui.sticker", "channel": "ui", "gainDb": -16, "duration": 0.6, "prompt": "Vinyl sticker slapped onto a card with a little paper peel, playful" },
+    { "id": "ui.roulette", "channel": "ui", "gainDb": -18, "duration": 1.5, "prompt": "Game-show prize wheel ticking, slowing down and stopping, short" },
+    { "id": "ui.pick", "channel": "ui", "gainDb": -18, "duration": 0.5, "prompt": "Bubbly pop, short, bright, satisfying selection sound" },
+    { "id": "ui.rewind", "channel": "ui", "gainDb": -20, "duration": 0.5, "prompt": "Quick cassette tape rewind, cartoon, very short" },
+    { "id": "ui.send", "channel": "ui", "gainDb": -14, "duration": 0.8, "prompt": "Paper airplane whoosh flying away, light and quick" },
+    { "id": "ui.count", "channel": "ui", "gainDb": -20, "duration": 0.5, "prompt": "Single soft coin tick, arcade score counter, very short" },
+    { "id": "ui.start", "channel": "ui", "gainDb": -14, "duration": 1.0, "prompt": "Bright marimba upbeat flourish, three notes rising, game start" },
+    { "id": "build.drop", "channel": "ui", "gainDb": -14, "duration": 0.5, "prompt": "Satisfying wooden block placed on a table, solid thunk" },
+    { "id": "build.remove", "channel": "ui", "gainDb": -18, "duration": 0.5, "prompt": "Short reverse whoosh, object disappearing, cartoon" },
+    { "id": "build.slide", "channel": "ui", "gainDb": -22, "duration": 0.5, "prompt": "Smooth short slide of a card across a desk" },
+    { "id": "build.snap", "channel": "ui", "gainDb": -18, "duration": 0.5, "prompt": "Plastic building brick snapping into place, small click" },
+    { "id": "mood.up", "channel": "ui", "gainDb": -14, "duration": 0.7, "prompt": "Rising three-note chime, happy, short, glockenspiel" },
+    { "id": "mood.down", "channel": "ui", "gainDb": -14, "duration": 0.7, "prompt": "Falling two-note uh-oh, cartoon, short" },
+    { "id": "mood.dealbreaker", "channel": "ui", "gainDb": -10, "duration": 0.7, "prompt": "Vinyl record scratch, comedic stop" },
+    { "id": "timer.tick", "channel": "ui", "gainDb": -22, "duration": 0.5, "prompt": "Single clock tick, crisp, dry" },
+    { "id": "timer.heartbeat", "channel": "ui", "gainDb": -16, "duration": 0.8, "prompt": "Low double heartbeat thump, tense, cartoon" },
+    { "id": "deadline.gong", "channel": "ui", "gainDb": -8, "duration": 2.0, "prompt": "Big dramatic gong hit with a silly cartoon echo, comedic doom" },
+    { "id": "verdict.stamp", "channel": "ui", "gainDb": -8, "duration": 0.6, "prompt": "Heavy rubber stamp slammed on paper on a wooden desk, thud" },
+    { "id": "verdict.happy", "channel": "music", "gainDb": -10, "duration": 1.5, "prompt": "Short party horn toot followed by a small crowd cheer" },
+    { "id": "verdict.meh", "channel": "music", "gainDb": -12, "duration": 1.2, "prompt": "Unimpressed hmm trombone, single descending note, comedic" },
+    { "id": "verdict.meltdown", "channel": "music", "gainDb": -10, "duration": 2.0, "prompt": "Sad trombone wah wah wah waaah, comedic failure" },
+    { "id": "music.lobby", "channel": "music", "gainDb": -20, "duration": 30, "loop": true, "prompt": "Laid-back lo-fi hip hop loop, warm keys, soft drums, 85 bpm, friendly, seamless loop" },
+    { "id": "music.build", "channel": "music", "gainDb": -22, "duration": 30, "loop": true, "prompt": "Light curious puzzle game music loop, pizzicato and marimba, 100 bpm, seamless loop" },
+    { "id": "music.build-fast", "channel": "music", "gainDb": -20, "duration": 30, "loop": true, "prompt": "Same light puzzle game loop but urgent, faster drums, 120 bpm, seamless loop" }
+  ]
+}
