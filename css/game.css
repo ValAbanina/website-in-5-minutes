@@ -565,7 +565,7 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 .stamp.is-in { animation: stamp 420ms var(--ease-stamp) both; }
 
 .timesup { display: grid; grid-template-columns: .8fr 1.2fr; gap: 24px; align-items: center; padding: 24px; }
-.deadline-art { width: min(280px, 70vw); }
+.deadline-art { width: min(220px, 56vw); }
 .screen-timesup .timer { margin-left: auto; }
 
 .program-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
@@ -768,7 +768,7 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
   body[data-ink="light"] .brief-who .role,
   body[data-ink="light"] .brief-go p { color: var(--color-text-on-dark); }
   .verdict-art { width: min(220px, 56vw); }
-  .deadline-art { width: min(220px, 56vw); }
+  .deadline-art { width: min(176px, 45vw); }
 }
 
 @media (min-width: 768px) {
