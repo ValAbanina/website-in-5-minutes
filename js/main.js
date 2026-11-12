@@ -201,6 +201,18 @@ function onClick(event) {
     return;
   }
 
+  if (action === 'go-home') {
+    if (state.screen !== 'attract' || state.howto || state.briefOpen) {
+      audio.play('ui.click');
+      audio.stopAll();
+      comments.reset();
+      const fresh = initialState(game.meta);
+      fresh.muted = state.muted;
+      store.reset(fresh);
+    }
+    return;
+  }
+
   if (action === 'toggle-mute') {
     const willMute = !audio.isMuted();
     if (willMute) audio.play('ui.toggle');

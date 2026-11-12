@@ -99,7 +99,15 @@ body[data-screen="timesup"] h1 { color: var(--color-text-on-dark); font: var(--t
 }
 .row-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 
-.logo { display: inline-flex; align-items: center; text-decoration: none; }
+.logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
 .logo-img { display: block; height: 44px; width: auto; }
 .logo-on-dark { display: none; }
 .topbar-dark .logo-on-light,
@@ -195,19 +203,6 @@ body[data-ink="light"] .topbar-clear .logo-on-dark { display: block; }
 .screen-light { background: var(--color-surface-muted); min-height: 100dvh; }
 .pick, .learn, .brief, .verdict { padding: 8px 28px 32px; }
 .pick-head, .pick-foot { display: flex; justify-content: space-between; gap: 16px; align-items: end; }
-.keys { font: var(--type-body-small); }
-kbd {
-  display: inline-grid;
-  place-items: center;
-  min-width: 28px;
-  min-height: 28px;
-  padding: 0 6px;
-  border: var(--border-ui);
-  border-bottom-width: 3px;
-  border-radius: 6px;
-  background: var(--color-surface-default);
-  font: var(--type-label);
-}
 .card-row {
   display: flex;
   gap: 22px;

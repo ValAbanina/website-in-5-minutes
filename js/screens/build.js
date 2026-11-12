@@ -57,7 +57,7 @@ function panelBody(state, game) {
       `<span class="font-sample font-sample-sm" style="font-family:'${esc(f.family)}', serif">The quick brown fox</span>`,
       `${f.family}${f.readable ? '' : ' · hard to read'}`,
     )).join('');
-    return `<h2>Type</h2><h3>Heading</h3><div class="choice-grid">${heads}</div><h3>Body</h3><div class="choice-grid">${bodies}</div>`;
+    return `<h2>Type</h2><p>Fonts replace the wireframe type.</p><h3>Heading</h3><div class="choice-grid">${heads}</div><h3>Body</h3><div class="choice-grid">${bodies}</div>`;
   }
   if (state.tab === 'style') {
     const chips = game.kit.styles.map((s) => choice(
@@ -67,7 +67,7 @@ function panelBody(state, game) {
       `<span class="style-mini" data-style="${esc(s.id)}" data-palette="${esc(state.palette || 'navy-ledger')}"><i></i><b>Aa</b></span>`,
       s.name,
     )).join('');
-    return `<h2>Style</h2><p>Corners, borders and shadows update at once.</p><div class="choice-grid">${chips}</div>`;
+    return `<h2>Style</h2><p>Corners, borders and shadows replace the plain boxes.</p><div class="choice-grid">${chips}</div>`;
   }
   if (state.tab === 'images') {
     const chips = game.kit.pictures.map((p) => choice(
@@ -91,7 +91,7 @@ function panelBody(state, game) {
     `<span class="swatches" data-palette="${esc(p.id)}"><i style="background:var(--kit-bg)"></i><i style="background:var(--kit-accent-2)"></i><i style="background:var(--kit-accent)"></i><i style="background:var(--kit-text)"></i></span>`,
     p.name,
   )).join('');
-  return `<h2>Colour palette</h2><p>Pick the mood. Every section updates at once.</p><div class="choice-grid">${chips}</div>`;
+  return `<h2>Colour palette</h2><p>Sections start as a wireframe. A palette paints them.</p><div class="choice-grid">${chips}</div>`;
 }
 
 export function render(state, game, client) {

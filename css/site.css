@@ -1,25 +1,6 @@
 /* Client website kit. Colours, type and shape come from design/tokens.css. */
 
 .site {
-  --kit-bg: #ffffff;
-  --kit-surface: #eef2f7;
-  --kit-text: #13233f;
-  --kit-muted: #5a6b85;
-  --kit-accent: #1f3a68;
-  --kit-on-accent: #ffffff;
-  --kit-accent-2: #8fb8e8;
-  --kit-on-accent-2: #13233f;
-  --kit-accent-text: #1f3a68;
-  --kit-border: #cbd5e1;
-  --kit-font-heading: var(--font-display);
-  --kit-heading-weight: 700;
-  --kit-font-body: var(--font-body);
-  --kit-radius-card: 8px;
-  --kit-radius-button: 8px;
-  --kit-radius-image: 8px;
-  --kit-border-width: 1px;
-  --kit-border-color: var(--kit-border);
-  --kit-shadow: none;
   background: var(--kit-bg);
   color: var(--kit-text);
   font-family: var(--kit-font-body);
@@ -27,6 +8,7 @@
   line-height: 1.5;
   min-height: 100%;
 }
+.site[data-palette=""] .pic img { filter: grayscale(1); }
 
 .site :is(h1, h2, h3, .display, .wordmark) {
   font-family: var(--kit-font-heading);
@@ -60,6 +42,7 @@
 }
 
 .block { position: relative; padding: 28px 32px; }
+.block + .block { border-top: var(--kit-border-width) solid var(--kit-border); }
 .block-inner { position: relative; z-index: 1; }
 .block.is-selected { outline: 2px solid var(--color-brand-highlight-on-light); outline-offset: -2px; }
 .kit-pattern {
@@ -156,6 +139,7 @@
 .feature-icon {
   width: 36px; height: 36px; display: grid; place-items: center;
   border-radius: var(--kit-radius-button);
+  border: var(--kit-border-width) solid var(--kit-border-color);
   background: var(--kit-accent);
   color: var(--kit-on-accent);
   font-weight: 700;
@@ -176,6 +160,7 @@
 .avatar {
   width: 56px; height: 56px; border-radius: 50%;
   display: grid; place-items: center;
+  border: var(--kit-border-width) solid var(--kit-border-color);
   background: var(--kit-accent-2); color: var(--kit-on-accent-2);
   font-family: var(--kit-font-heading); font-size: 24px;
 }
@@ -228,7 +213,7 @@
   color: var(--kit-muted);
 }
 .cta { text-align: center; padding: 12px; }
-.cta-band { background: var(--kit-accent); color: var(--kit-on-accent); border-radius: var(--kit-radius-card); padding: 28px 16px; }
+.cta-band { background: var(--kit-accent); color: var(--kit-on-accent); border-radius: var(--kit-radius-card); border: var(--kit-border-width) solid var(--kit-border-color); padding: 28px 16px; }
 .cta-band :is(h2, p) { color: var(--kit-on-accent); }
 .cta-band .kit-btn { background: var(--kit-bg); color: var(--kit-text); }
 .foot { align-items: center; gap: 16px; }

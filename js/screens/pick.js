@@ -31,7 +31,6 @@ export function render(state, game) {
           <h1>Who needs a website today?</h1>
           <p>Five clients, five very different websites. Pick one and read the brief. Nobody says exactly what they want.</p>
         </div>
-        <p class="keys"><kbd>←</kbd> <kbd>→</kbd> browse <kbd>Enter</kbd> pick</p>
       </div>
       <div class="card-row" tabindex="0" aria-label="Clients">${cards}</div>
       <div class="pick-foot">

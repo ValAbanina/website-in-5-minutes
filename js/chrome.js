@@ -2,10 +2,10 @@ import { esc, firstName, formatClock } from './dom.js';
 import { characterHTML } from './characters.js';
 
 export function logo() {
-  return `<a class="logo" href="#main" aria-label="Design Formation">
+  return `<button type="button" class="logo" data-action="go-home" aria-label="Design Formation, home">
     <img class="logo-img logo-on-dark" src="assets/svg/logos/df-on-dark.svg" alt="">
     <img class="logo-img logo-on-light" src="assets/svg/logos/df-on-light.svg" alt="">
-  </a>`;
+  </button>`;
 }
 
 export function muteButton(muted) {

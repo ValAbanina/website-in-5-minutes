@@ -102,7 +102,31 @@
    Website Kit — applied to the preview root:
    <div class="site" data-palette="navy-ledger" data-heading="libre-baskerville" data-body="lato" data-style="classic">
    ───────────────────────────────────────────────────────────── */
-.site { background: var(--kit-bg); color: var(--kit-text); font-family: var(--kit-font-body); }
+/* Wireframe until the player picks a palette, a font or a style. */
+.site {
+  --kit-bg: var(--color-surface-default);
+  --kit-surface: var(--color-surface-muted);
+  --kit-text: var(--color-text-strong);
+  --kit-muted: var(--color-text-default);
+  --kit-accent: var(--color-surface-default);
+  --kit-on-accent: var(--color-text-strong);
+  --kit-accent-2: var(--color-surface-muted);
+  --kit-on-accent-2: var(--color-text-strong);
+  --kit-accent-text: var(--color-text-strong);
+  --kit-border: var(--color-border-strong);
+  --kit-font-heading: Arial, Helvetica, sans-serif;
+  --kit-heading-weight: 700;
+  --kit-font-body: Arial, Helvetica, sans-serif;
+  --kit-radius-card: 0;
+  --kit-radius-button: 0;
+  --kit-radius-image: 0;
+  --kit-border-width: 1px;
+  --kit-border-color: var(--kit-border);
+  --kit-shadow: none;
+  background: var(--kit-bg);
+  color: var(--kit-text);
+  font-family: var(--kit-font-body);
+}
 
 [data-palette="navy-ledger"]  { --kit-bg:#FFFFFF; --kit-surface:#EEF2F7; --kit-text:#13233F; --kit-muted:#5A6B85; --kit-accent:#1F3A68; --kit-on-accent:#FFFFFF; --kit-accent-2:#8FB8E8; --kit-on-accent-2:#13233F; --kit-accent-text:#1F3A68; --kit-border:#CBD5E1; }
 [data-palette="neon-pop"]     { --kit-bg:#12002E; --kit-surface:#2A0A57; --kit-text:#FFFFFF; --kit-muted:#C9B8FF; --kit-accent:#FF3EA5; --kit-on-accent:#12002E; --kit-accent-2:#B8FF2E; --kit-on-accent-2:#12002E; --kit-accent-text:#FF3EA5; --kit-border:#5B2FA8; }
