@@ -26,6 +26,9 @@ export function initialState(meta) {
     elapsed: 0,
     howto: false,
     briefOpen: false,
+    confirmLeave: false,
+    verdictLine: null,
+    verdictVoice: null,
     comment: null,
     saidHurry: false,
   };

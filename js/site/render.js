@@ -50,7 +50,16 @@ function patternLayer(game, patternId) {
 
 const PATTERNED = new Set(['features', 'stats', 'testimonial', 'pricing', 'team', 'faq', 'about']);
 
-function toolbar(section, index, total, game) {
+export function sectionBar(state, game) {
+  const index = state.selectedSection;
+  const section = index === null || index === undefined ? null : state.sections[index];
+  if (!section) {
+    const hint = state.sections.length
+      ? 'Select a section on the page to change its layout, move it or remove it.'
+      : 'Add a section to start the page.';
+    return `<p class="section-bar-hint">${hint}</p>`;
+  }
+  const total = state.sections.length;
   const meta = game.kit.sections.find((s) => s.id === section.type);
   const layouts = meta?.layouts || [];
   const columns = columnOptions(meta, section.layout);
@@ -63,21 +72,24 @@ function toolbar(section, index, total, game) {
     const on = Number(section.columns) === Number(n);
     return `<button type="button" data-action="set-columns" data-columns="${n}" aria-pressed="${on}">${n}</button>`;
   }).join('');
-  return `<div class="section-toolbar">
-    <span class="section-toolbar-name">${esc(meta?.name || section.type)}</span>
-    ${layouts.length ? `<span class="section-toolbar-label">Layout</span><span class="seg">${layoutButtons}</span>` : ''}
-    ${columns.length ? `<span class="section-toolbar-label">Columns</span><span class="seg">${columnButtons}</span>` : ''}
-    <button type="button" data-action="move-section" data-dir="-1" aria-label="Move up" ${index === 0 ? 'disabled' : ''}>↑</button>
-    <button type="button" data-action="move-section" data-dir="1" aria-label="Move down" ${index === total - 1 ? 'disabled' : ''}>↓</button>
-    <button type="button" data-action="remove-section" aria-label="Remove section">×</button>
+  return `<div class="section-bar-inner" role="toolbar" aria-label="${esc(meta?.name || section.type)} section">
+    <strong class="section-bar-name">${esc(meta?.name || section.type)}</strong>
+    ${layouts.length ? `<span class="section-bar-group"><span class="section-bar-label">Layout</span><span class="seg">${layoutButtons}</span></span>` : ''}
+    ${columns.length ? `<span class="section-bar-group"><span class="section-bar-label">Columns</span><span class="seg">${columnButtons}</span></span>` : ''}
+    <span class="section-bar-group section-bar-end">
+      <button type="button" class="bar-btn" data-action="move-section" data-dir="-1" aria-label="Move section up" ${index === 0 ? 'disabled' : ''}>↑</button>
+      <button type="button" class="bar-btn" data-action="move-section" data-dir="1" aria-label="Move section down" ${index === total - 1 ? 'disabled' : ''}>↓</button>
+      <button type="button" class="bar-btn" data-action="remove-section" aria-label="Remove section">×</button>
+    </span>
   </div>`;
 }
 
 function block(section, index, total, state, inner, game) {
   const selected = state.selectedSection === index;
   const pattern = PATTERNED.has(section.type) ? patternLayer(game, state.pattern) : '';
-  return `<section class="block block-${esc(section.type)}${selected ? ' is-selected' : ''}" data-index="${index}" data-action="select-section" data-layout="${esc(section.layout || '')}" data-type="${esc(section.type)}" draggable="true">
-    ${selected ? toolbar(section, index, total, game) : ''}
+  const meta = game.kit.sections.find((s) => s.id === section.type);
+  const label = `${meta?.name || section.type} section, ${index + 1} of ${total}`;
+  return `<section class="block block-${esc(section.type)}${selected ? ' is-selected' : ''}" data-index="${index}" data-action="select-section" data-layout="${esc(section.layout || '')}" data-type="${esc(section.type)}" draggable="true" tabindex="0" role="button" aria-pressed="${selected}" aria-label="${esc(label)}">
     ${pattern}
     <div class="block-inner">${inner}</div>
   </section>`;
@@ -269,7 +281,7 @@ export function renderSite(state, client, game) {
     `data-style="${esc(state.style || '')}"`,
   ].join(' ');
   if (!state.sections.length) {
-    return `<div class="site ${narrow ? 'is-narrow' : ''}" ${attrs}><div class="site-empty"><p>Drag a section here, or press +.</p></div></div>`;
+    return `<div class="site ${narrow ? 'is-narrow' : ''}" ${attrs}><div class="site-empty"><p><strong>The page is empty.</strong><br>Add a section from the Sections list. Navigation is a good start.</p></div></div>`;
   }
   const total = state.sections.length;
   const html = state.sections.map((section, index) => block(

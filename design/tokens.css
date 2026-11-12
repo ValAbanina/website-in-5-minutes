@@ -5,8 +5,7 @@
    2. Website Kit — what players choose for the client's website
    ───────────────────────────────────────────────────────────── */
 
-/* Fonts (Google Fonts). Load only what the screen needs if you want to optimise. */
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;600;700;800;900&family=Roboto:wght@400;500;700&family=Caveat:wght@400;700&family=Libre+Baskerville:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;800&family=Pacifico&family=UnifrakturMaguntia&family=Quicksand:wght@400;500;700&family=Bungee&family=Playfair+Display:wght@400;700&family=Abril+Fatface&family=Space+Grotesk:wght@400;700&family=Lato:wght@400;700&family=Nunito:wght@400;700&family=Source+Serif+4:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap');
+/* Fonts (Google Fonts) are loaded from index.html with <link>, so they don't block the stylesheet. */
 
 :root {
   /* ── Game UI: colour (program = DF by default) ── */

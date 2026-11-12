@@ -15,6 +15,7 @@ export function createAudio(cues, mixing) {
   let music = null;
   let voice = null;
   let unlocked = false;
+  let wantedMusic = null;
 
   function ensure() {
     if (ctx) return ctx;
@@ -108,8 +109,10 @@ export function createAudio(cues, mixing) {
         }
       };
     }
+    const isMusic = !voiceTrack && (id.startsWith('music.') || (cue?.channel === 'music' && cue?.loop));
+    if (isMusic && wantedMusic !== id) return null;
     try { source.start(); } catch { /* ignore */ }
-    if (!voiceTrack && (id.startsWith('music.') || cue?.channel === 'music' && cue?.loop)) {
+    if (isMusic) {
       if (music?.source) {
         try { music.source.stop(); } catch { /* already ended */ }
       }
@@ -139,12 +142,21 @@ export function createAudio(cues, mixing) {
       }
       startBuffer(id, { voiceTrack: true }).catch(() => {});
     },
+    /** Resolves true when at least one audio file is listed in the manifest. */
+    async ready() {
+      const list = await loadManifest();
+      return !!list && Object.keys(list).length > 0;
+    },
     loop(id) {
       if (!id) return;
-      if (music?.id === id) return;
-      startBuffer(id, { loop: true }).catch(() => {});
+      if (music?.id === id || wantedMusic === id) return;
+      wantedMusic = id;
+      startBuffer(id, { loop: true })
+        .then((source) => { if (!source && wantedMusic === id) wantedMusic = null; })
+        .catch(() => { if (wantedMusic === id) wantedMusic = null; });
     },
     stopMusic() {
+      wantedMusic = null;
       if (music?.source) {
         try { music.source.stop(); } catch { /* ignore */ }
       }

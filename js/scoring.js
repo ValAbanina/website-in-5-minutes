@@ -64,9 +64,9 @@ export function score(state, client, game) {
   }
   rows.push({
     id: 'palette',
-    text: paletteTier === 'also'
-      ? `Palette: ${palette?.name || 'None'}. ${who} wanted ${perfectPalette?.name || 'another'}`
-      : `Palette: ${palette?.name || 'None'}`,
+    text: paletteTier === 'perfect'
+      ? `Palette: ${palette.name}`
+      : `Palette: ${palette?.name || 'not chosen'}. ${who} wanted ${perfectPalette?.name || 'another'}`,
     points: palettePts,
     icon: tierIcon(paletteTier, paletteDeal),
     dealBreaker: paletteDeal,
@@ -82,7 +82,7 @@ export function score(state, client, game) {
     headingTier = 'also';
     headingPts = game.scoring.points.headingFont.alsoWorks;
   }
-  const headingName = heading?.family || 'None';
+  const headingName = heading?.family || 'not chosen';
   rows.push({
     id: 'headingFont',
     text: headingTier === 'perfect'
@@ -97,7 +97,7 @@ export function score(state, client, game) {
   const bodyPts = bodyReadable ? game.scoring.points.bodyFont.readable : 0;
   rows.push({
     id: 'bodyFont',
-    text: `Body font: ${body?.family || 'None'}, ${bodyReadable ? 'easy to read' : 'hard to read'}`,
+    text: body ? `Body font: ${body.family}, ${bodyReadable ? 'easy to read' : 'hard to read'}` : 'Body font: not chosen',
     points: bodyPts,
     icon: bodyPts > 0 ? 'check' : 'miss',
     dealBreaker: false,
@@ -113,7 +113,7 @@ export function score(state, client, game) {
     styleTier = 'also';
     stylePts = game.scoring.points.style.alsoWorks;
   }
-  const styleName = style?.name || 'None';
+  const styleName = style?.name || 'not chosen';
   rows.push({
     id: 'style',
     text: styleTier === 'perfect'
@@ -139,7 +139,7 @@ export function score(state, client, game) {
   } else if (pictureDecoy) {
     picturePts = game.scoring.points.pictures.decoy;
   }
-  const pictureName = picture?.name || 'None';
+  const pictureName = picture?.name || 'not chosen';
   let pictureText = `Pictures: ${pictureName}`;
   if (pictureTier === 'also') pictureText = `Pictures: ${pictureName}. ${who} was hoping for ${perfectPicture?.name || 'another'}`;
   else if (pictureTier === 'miss') pictureText = `Pictures: ${pictureName}. ${who} wanted ${perfectPicture?.name || 'another'}`;
