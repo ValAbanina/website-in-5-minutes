@@ -14,15 +14,16 @@ export function render(state, game, client) {
   const result = state.result;
   const mood = result?.outcome?.id || 'meh';
   const face = mood === 'happy' ? 'happy' : mood === 'meh' ? 'meh' : 'meltdown';
-  const line = (client.lines[mood] || client.lines.meltdown || [''])[0];
+  const line = state.verdictLine || (client.lines[mood] || client.lines.meltdown || [''])[0];
   const rows = [...(result?.rows || []), ...(result?.penalties || [])];
   const list = rows.map((row) => `<li class="score-row is-${esc(row.icon)}">
       <span class="score-mark" aria-hidden="true">${mark(row.icon)}</span>
       <span>${esc(row.text)}</span>
       ${row.dealBreaker ? '<span class="badge">Deal-breaker</span>' : `<span class="pts">${row.points > 0 ? '+' : ''}${row.points}</span>`}
     </li>`).join('');
-  const extra = result?.dealBreakers?.length
-    ? ' One deal-breaker is enough for a meltdown, whatever the score.'
+  const dealRows = (result?.rows || []).filter((row) => row.dealBreaker).map((row) => row.text.split('.')[0]);
+  const extra = dealRows.length
+    ? ` Deal-breaker here: ${dealRows.join('; ')}. One is enough for a meltdown, whatever the score.`
     : '';
   return `<div class="screen screen-client">
     <header class="topbar topbar-clear">

@@ -18,7 +18,7 @@ export function render(state, game) {
       <a class="btn btn-primary" data-program="${esc(program.id)}" data-action="explore" href="${esc(program.url)}" target="_blank" rel="noopener">Explore ${esc(EXPLORE[program.id] || program.name)}</a>
       ${session
         ? `<a class="text-btn" data-program="${esc(program.id)}" data-action="info-session" href="${esc(session)}" target="_blank" rel="noopener">Book an info session</a>`
-        : '<button type="button" class="text-btn" disabled>Book an info session</button>'}
+        : ''}
     </article>`;
   }).join('');
   return `<div class="screen screen-light">

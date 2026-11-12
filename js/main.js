@@ -4,7 +4,7 @@ import { score } from './scoring.js';
 import { createAudio } from './audio.js';
 import { createStats } from './stats.js';
 import { createComments } from './comments.js';
-import { clientById, onClientInk } from './dom.js';
+import { clientById, onClientInk, deviceKind, esc } from './dom.js';
 import { defaultSection } from './site/render.js';
 import { shareResult } from './share.js';
 import * as attract from './screens/attract.js';
@@ -50,10 +50,47 @@ function renderDialog(state) {
   const client = currentClient(state);
   if (state.howto) root.innerHTML = howto.render();
   else if (state.briefOpen && client) root.innerHTML = brief.reread(client);
+  else if (state.confirmLeave) root.innerHTML = leaveDialog(client);
   else root.innerHTML = '';
   const dialog = root.querySelector('[role="dialog"]');
-  if (dialog) dialog.focus();
-  document.getElementById('main').inert = !!(state.howto || state.briefOpen);
+  if (dialog) (dialog.querySelector('[data-autofocus]') || dialog).focus();
+  document.getElementById('main').inert = dialogOpen(state);
+}
+
+function dialogOpen(state) {
+  return !!(state.howto || state.briefOpen || state.confirmLeave);
+}
+
+function leaveDialog(client) {
+  const who = client ? esc(String(client.name).split(' ')[0]) : 'your client';
+  return `<div class="modal-back" data-action="close-dialog">
+    <div class="modal modal-small" role="alertdialog" aria-modal="true" aria-labelledby="leave-title" tabindex="-1">
+      <h2 id="leave-title">Leave this round?</h2>
+      <p>${who}'s website will be lost and the clock keeps running while you decide.</p>
+      <footer class="modal-foot">
+        <button type="button" class="btn" data-action="leave-round">Leave</button>
+        <button type="button" class="btn btn-primary" data-action="close-dialog" data-autofocus>Keep building</button>
+      </footer>
+    </div>
+  </div>`;
+}
+
+function pickVerdict(client, result, state) {
+  const mood = result.outcome?.id || 'meh';
+  const triggers = client.lines.triggers || {};
+  const kebab = (v) => String(v).replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+  if (result.dealBreakers.length) {
+    const map = { palette: 'dealBreakerPalette', headingFont: 'dealBreakerHeading', decoration: 'dealBreakerDecoration' };
+    const key = result.dealBreakers.map((id) => map[id]).find((k) => k && triggers[k]);
+    if (key) return { line: triggers[key], voice: `voice.${client.id}.${kebab(key)}` };
+  }
+  const picture = game.kit.pictures.find((p) => p.id === state.picture);
+  if (mood === 'meltdown' && picture?.decoy && triggers.decoyPicture) {
+    return { line: triggers.decoyPicture, voice: `voice.${client.id}.decoy-picture` };
+  }
+  const pool = client.lines[mood] || client.lines.meltdown || [''];
+  const i = Math.floor(Math.random() * pool.length);
+  return { line: pool[i], voice: `voice.${client.id}.${mood}-${i + 1}` };
 }
 
 function paint(state) {
@@ -96,7 +133,9 @@ function addSection(type, index = null) {
   const prev = store.get();
   const section = defaultSection(type, game);
   const sections = prev.sections.slice();
-  const at = index === null ? sections.length : index;
+  const picked = prev.selectedSection;
+  const after = picked === null || picked === undefined ? sections.length : Math.min(picked + 1, sections.length);
+  const at = index === null ? after : index;
   sections.splice(at, 0, section);
   store.set({ sections, selectedSection: at }, { history: true });
   rememberDesign(prev);
@@ -113,8 +152,11 @@ function finish(auto) {
   const elapsed = s.startedAt
     ? Math.min(game.meta.timerSeconds, Math.floor((Date.now() - s.startedAt) / 1000))
     : 0;
+  const said = pickVerdict(client, result, s);
   store.set({
     result,
+    verdictLine: said.line,
+    verdictVoice: said.voice,
     elapsed,
     autoSent: !!auto,
     screen: auto ? 'timesup' : 'verdict',
@@ -152,9 +194,8 @@ function onDrop(info) {
 }
 
 function trapFocus(event) {
-  const dialog = document.querySelector('[role="dialog"]');
+  const dialog = document.querySelector('[role="dialog"], [role="alertdialog"]');
   if (!dialog) return;
-  const items = [...dialog.querySelectorAll('button, a, input, [tabindex]')].filter((el) => !el.disabled && el.tabIndex !== -1 || el === dialog);
   const focusable = [...dialog.querySelectorAll('button, a')].filter((el) => !el.disabled);
   if (!focusable.length) return;
   const first = focusable[0];
@@ -166,7 +207,6 @@ function trapFocus(event) {
     event.preventDefault();
     first.focus();
   }
-  void items;
 }
 
 function openBrief(clientId) {
@@ -185,7 +225,7 @@ function onClick(event) {
   const btn = event.target.closest('[data-action]');
   if (!btn) return;
   const action = btn.dataset.action;
-  if ((action === 'close-howto' || action === 'close-brief') && event.target.closest('.modal') && event.target !== btn) return;
+  if (btn.classList.contains('modal-back') && event.target.closest('.modal')) return;
   const state = store.get();
   const client = currentClient(state);
 
@@ -201,7 +241,12 @@ function onClick(event) {
     return;
   }
 
-  if (action === 'go-home') {
+  if (action === 'go-home' && state.screen === 'build' && !state.confirmLeave) {
+    lastFocus = document.activeElement;
+    store.set({ confirmLeave: true });
+    return;
+  }
+  if (action === 'go-home' || action === 'leave-round') {
     if (state.screen !== 'attract' || state.howto || state.briefOpen) {
       audio.play('ui.click');
       audio.stopAll();
@@ -235,8 +280,8 @@ function onClick(event) {
   } else if (action === 'open-howto') {
     lastFocus = document.activeElement;
     store.set({ howto: true });
-  } else if (action === 'close-howto' || action === 'close-brief') {
-    store.set({ howto: false, briefOpen: false });
+  } else if (action === 'close-howto' || action === 'close-brief' || action === 'close-dialog') {
+    store.set({ howto: false, briefOpen: false, confirmLeave: false });
     lastFocus?.focus?.();
   } else if (action === 'select-client') {
     openBrief(btn.dataset.id);
@@ -256,9 +301,12 @@ function onClick(event) {
       timeLeft: game.meta.timerSeconds,
       result: null,
       comment: null,
-      tab: 'colour',
+      tab: deviceKind() === 'desktop' ? 'colour' : 'sections',
     });
-  } else if (action === 'open-brief') store.set({ briefOpen: true });
+  } else if (action === 'open-brief') {
+    lastFocus = document.activeElement;
+    store.set({ briefOpen: true });
+  }
   else if (action === 'add-section') addSection(btn.dataset.type);
   else if (action === 'select-section') store.set({ selectedSection: Number(btn.dataset.index) });
   else if (action === 'remove-section') {
@@ -310,8 +358,10 @@ function onClick(event) {
     const played = state.played.includes(state.clientId) || !state.clientId
       ? state.played
       : [...state.played, state.clientId];
-    const next = game.clients.find((c) => !played.includes(c.id)) || game.clients[0];
-    freshRound('pick', next.id, action === 'play-again' ? played : played);
+    let pool = game.clients.filter((c) => !played.includes(c.id));
+    if (!pool.length) pool = game.clients.filter((c) => c.id !== state.clientId);
+    const next = pool[Math.floor(Math.random() * pool.length)] || game.clients[0];
+    freshRound('pick', next.id, played);
   } else if (action === 'to-learn') store.set({ screen: 'learn' });
   else if (action === 'share' && client && state.result) {
     shareResult({ game, client, result: state.result, elapsed: state.elapsed, stats });
@@ -369,13 +419,25 @@ function setChoice(key, value) {
 
 function onKey(event) {
   const state = store.get();
-  if (event.key === 'Escape' && (state.howto || state.briefOpen)) {
-    store.set({ howto: false, briefOpen: false });
+  if (event.key === 'Escape' && dialogOpen(state)) {
+    store.set({ howto: false, briefOpen: false, confirmLeave: false });
     lastFocus?.focus?.();
     return;
   }
-  if ((state.howto || state.briefOpen) && event.key === 'Tab') {
-    trapFocus(event);
+  if (dialogOpen(state)) {
+    if (event.key === 'Tab') trapFocus(event);
+    return;
+  }
+  const focusedBlock = state.screen === 'build' && event.target.classList?.contains('block') ? event.target : null;
+  if (focusedBlock && (event.key === 'Enter' || event.key === ' ')) {
+    event.preventDefault();
+    store.set({ selectedSection: Number(focusedBlock.dataset.index) });
+    return;
+  }
+  if (focusedBlock && (event.key === 'Delete' || event.key === 'Backspace')) {
+    event.preventDefault();
+    store.set({ selectedSection: Number(focusedBlock.dataset.index) });
+    document.querySelector('#build-section-bar [data-action="remove-section"]')?.click();
     return;
   }
   if (state.screen === 'pick' && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
@@ -393,8 +455,10 @@ function onKey(event) {
       openBrief(state.clientId);
     }
   } else if (state.screen === 'build' && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+    if (!event.target.closest?.('#build-preview, #build-section-bar')) return;
     if (event.target.closest?.('input, textarea')) return;
-    if (state.selectedSection === null) return;
+    if (focusedBlock) store.set({ selectedSection: Number(focusedBlock.dataset.index) });
+    if (store.get().selectedSection === null) return;
     event.preventDefault();
     moveSection(event.key === 'ArrowUp' ? -1 : 1);
   } else if ((state.screen === 'attract') && (event.key === 'Enter' || event.key === ' ')) {
@@ -415,7 +479,7 @@ function effects(next, prev) {
   if (next.screen === 'verdict' && prev.screen !== 'verdict' && client && next.result) {
     audio.stopMusic();
     audio.play(`verdict.${next.result.outcome.id}`);
-    audio.say(`voice.${client.id}.${next.result.outcome.id}-1`);
+    audio.say(next.verdictVoice || `voice.${client.id}.${next.result.outcome.id}-1`);
   }
   if (next.screen === 'build' && prev.screen === 'build' && next.timeLeft !== prev.timeLeft && client) {
     const left = next.timeLeft;
@@ -440,6 +504,8 @@ function boot(data, cues) {
   try { seed.muted = sessionStorage.getItem('w5-muted') === '1'; } catch { /* private mode */ }
   store = createStore(seed);
   audio = createAudio(cues.cues, cues.mixing);
+  document.body.dataset.audio = 'off';
+  audio.ready().then((has) => { document.body.dataset.audio = has ? 'on' : 'off'; });
   if (seed.muted) audio.setMuted(true);
   stats = createStats(config.STATS_URL);
   comments = createComments({ store, game, audio });
@@ -449,9 +515,13 @@ function boot(data, cues) {
       finish(true);
       return;
     }
-    const structural = next.screen !== prev.screen || next.howto !== prev.howto || next.briefOpen !== prev.briefOpen
+    const dialogChanged = next.howto !== prev.howto || next.briefOpen !== prev.briefOpen || next.confirmLeave !== prev.confirmLeave;
+    const structural = next.screen !== prev.screen
       || (next.screen === 'pick' && next.clientId !== prev.clientId);
-    if (structural) {
+    if (dialogChanged && !structural && next.screen === 'build') {
+      renderDialog(next);
+      build.sync(document.querySelector('[data-screen="build"]'), next, prev, game, currentClient(next), store);
+    } else if (structural || dialogChanged) {
       const row = document.querySelector('.card-row');
       const left = row?.scrollLeft || 0;
       paint(next);
@@ -500,9 +570,10 @@ function boot(data, cues) {
       store.reset(fresh);
     }, game.meta.idleResetSeconds * 1000);
   };
-  ['pointerdown', 'keydown', 'touchstart'].forEach((type) => {
+  ['pointerdown', 'pointermove', 'keydown', 'touchstart', 'wheel'].forEach((type) => {
     document.addEventListener(type, bump, { passive: true });
   });
+  document.addEventListener('scroll', bump, { passive: true, capture: true });
   bump();
 
   window.setInterval(() => {
