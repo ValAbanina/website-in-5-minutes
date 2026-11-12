@@ -585,6 +585,25 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 .modal-small { width: min(460px, 100%); }
 .modal-small .modal-foot { justify-content: flex-end; margin-top: 8px; }
 .modal-head, .modal-foot { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+/* Re-read the brief: the client sits on the right in three-quarter view, facing the brief */
+.reread { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 20px; align-items: end; margin: 16px 0 20px; }
+.reread-text { display: grid; gap: 14px; align-self: center; }
+.reread .bubble-lg { max-width: none; }
+.reread .bubble::after {
+  content: "";
+  position: absolute;
+  right: -11px;
+  bottom: 28px;
+  width: 18px;
+  height: 18px;
+  background: var(--color-surface-default);
+  border-top: var(--border-ui);
+  border-right: var(--border-ui);
+  transform: rotate(45deg);
+}
+.reread-note { margin: 0; color: var(--color-text-default, inherit); }
+.reread-art { background: var(--card); border: var(--border-ui); border-radius: var(--radius-md, 16px); overflow: hidden; display: flex; align-items: flex-end; }
+.reread-art .char { width: 100%; }
 .howto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .howto-grid article { background: var(--color-surface-muted); border-radius: var(--radius-md); padding: 12px; display: flex; gap: 8px; }
 .howto-n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--color-text-strong); color: var(--color-text-on-dark); font: var(--type-label); flex: none; }
@@ -691,6 +710,13 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 }
 
 @media (max-width: 767px) {
+  /* Mobile: the client and their note on top, the brief below with its tail pointing up at them */
+  .reread { grid-template-columns: minmax(0, 1fr) 104px; gap: 14px 12px; margin: 12px 0 16px; align-items: end; }
+  .reread-text { display: contents; }
+  .reread-note { grid-column: 1; grid-row: 1; align-self: center; }
+  .reread-art { grid-column: 2; grid-row: 1; }
+  .reread .bubble-lg { grid-column: 1 / -1; grid-row: 2; }
+  .reread .bubble::after { top: -11px; right: 42px; bottom: auto; border-top: var(--border-ui); border-left: var(--border-ui); border-right: 0; }
   h1, body[data-screen="attract"] h1, body[data-screen="start"] h1, body[data-screen="timesup"] h1 {
     font: 800 42px/0.95 var(--font-display);
   }
