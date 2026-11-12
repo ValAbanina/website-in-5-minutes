@@ -112,7 +112,8 @@
 .hero-decor[data-decor="confetti"] { background-image: url("../assets/svg/decor/confetti.svg"); }
 .hero-decor[data-decor="sparkles"] { background-image: url("../assets/svg/decor/sparkles.svg"); }
 
-.pic { margin: 0; position: relative; aspect-ratio: 320 / 220; border-radius: var(--kit-radius-image); overflow: hidden; background: var(--kit-surface); }
+.pic { cursor: pointer; margin: 0; position: relative; aspect-ratio: 320 / 220; border-radius: var(--kit-radius-image); overflow: hidden; background: var(--kit-surface); }
+.pic:hover { outline: 3px dashed var(--kit-accent, #000); outline-offset: -6px; }
 .pic img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: var(--kit-radius-image); }
 .hero-bg .pic img,
 .banner-image .pic img { object-fit: cover; }

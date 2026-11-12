@@ -77,19 +77,25 @@
 
     "pictures": [
       { "id": "charts", "name": "Charts", "kind": "illustration" },
-      { "id": "office-handshake", "name": "Office handshake", "kind": "photo" },
+      { "id": "office-handshake", "name": "Office handshake", "kind": "illustration" },
+      { "id": "coins-and-piggy-bank", "name": "Coins & piggy bank", "kind": "illustration" },
       { "id": "neon-blobs", "name": "Neon blobs", "kind": "illustration" },
       { "id": "rocket-launch", "name": "Rocket launch", "kind": "illustration" },
-      { "id": "fresh-bread", "name": "Fresh bread", "kind": "photo" },
+      { "id": "potted-fern", "name": "Potted fern", "kind": "illustration" },
+      { "id": "fresh-bread", "name": "Fresh bread", "kind": "illustration" },
       { "id": "croissant-and-wheat", "name": "Croissant & wheat", "kind": "illustration" },
-      { "id": "dried-bouquet", "name": "Dried bouquet", "kind": "photo" },
+      { "id": "pasta-and-tomatoes", "name": "Pasta & tomatoes", "kind": "illustration" },
+      { "id": "dried-bouquet", "name": "Dried bouquet", "kind": "illustration" },
       { "id": "moon-and-roses", "name": "Moon & roses", "kind": "illustration" },
+      { "id": "candles", "name": "Candles", "kind": "illustration" },
       { "id": "leaves-and-lotus", "name": "Leaves & lotus", "kind": "illustration" },
-      { "id": "calm-beach", "name": "Calm beach", "kind": "photo" },
-      { "id": "glass-skyscraper", "name": "Glass skyscraper", "kind": "photo", "decoy": true },
+      { "id": "calm-beach", "name": "Calm beach", "kind": "illustration" },
+      { "id": "teapot-and-cups", "name": "Teapot & cups", "kind": "illustration" },
+      { "id": "coffee-and-laptop", "name": "Coffee & laptop", "kind": "illustration" },
+      { "id": "glass-skyscraper", "name": "Glass skyscraper", "kind": "illustration", "decoy": true },
       { "id": "party-balloons", "name": "Party balloons", "kind": "illustration", "decoy": true }
     ],
-    "picturesNote": "Photo pictures are placeholders in Figma. Use real licensed photos (e.g. Adobe Stock) or keep the placeholder card. Decoys are worth 0 for everyone.",
+    "picturesNote": "Every picture is a hand-drawn doodle illustration, no photos, so they match the characters. Decoys are worth 0 for everyone. Pictures nobody asked for are also worth 0.",
 
     "heroDecor": [
       { "id": "none", "name": "None" },
@@ -180,7 +186,7 @@
         "palette": { "perfect": "navy-ledger", "alsoWorks": ["ocean-mist"] },
         "headingFont": { "perfect": "libre-baskerville", "alsoWorks": ["playfair-display"] },
         "style": { "perfect": "classic", "alsoWorks": ["minimal"] },
-        "pictures": { "perfect": "charts", "alsoWorks": ["office-handshake"] },
+        "pictures": { "perfect": "charts", "alsoWorks": ["office-handshake", "coins-and-piggy-bank"] },
         "decoration": { "heroDecor": ["none"], "patterns": ["none", "grid", "stripes"] },
         "mustHave": "testimonial"
       },
@@ -237,7 +243,7 @@
         "palette": { "perfect": "neon-pop", "alsoWorks": ["acid-pop"] },
         "headingFont": { "perfect": "bricolage-grotesque", "alsoWorks": ["bungee", "space-grotesk"] },
         "style": { "perfect": "neo-brutalist", "alsoWorks": ["playful"] },
-        "pictures": { "perfect": "neon-blobs", "alsoWorks": ["rocket-launch"] },
+        "pictures": { "perfect": "neon-blobs", "alsoWorks": ["rocket-launch", "potted-fern"] },
         "decoration": { "heroDecor": ["sparkles", "confetti"], "patterns": ["dots", "grid", "checks"] },
         "mustHave": "cta"
       },
@@ -294,7 +300,7 @@
         "palette": { "perfect": "warm-bakery", "alsoWorks": ["terracotta"] },
         "headingFont": { "perfect": "pacifico", "alsoWorks": ["caveat"] },
         "style": { "perfect": "soft-rounded", "alsoWorks": ["playful"] },
-        "pictures": { "perfect": "fresh-bread", "alsoWorks": ["croissant-and-wheat"] },
+        "pictures": { "perfect": "fresh-bread", "alsoWorks": ["croissant-and-wheat", "pasta-and-tomatoes"] },
         "decoration": { "heroDecor": ["dots"], "patterns": ["none", "checks", "stripes"] },
         "mustHave": "gallery"
       },
@@ -352,7 +358,7 @@
         "palette": { "perfect": "dark-romance", "alsoWorks": ["midnight-ink"] },
         "headingFont": { "perfect": "unifrakturmaguntia", "alsoWorks": ["playfair-display", "abril-fatface"] },
         "style": { "perfect": "minimal", "alsoWorks": ["classic"] },
-        "pictures": { "perfect": "dried-bouquet", "alsoWorks": ["moon-and-roses"] },
+        "pictures": { "perfect": "dried-bouquet", "alsoWorks": ["moon-and-roses", "candles"] },
         "decoration": { "heroDecor": ["none", "squiggle"], "patterns": ["none", "stripes"] },
         "mustHave": "gallery"
       },
@@ -409,7 +415,7 @@
         "palette": { "perfect": "calm-sage", "alsoWorks": ["ocean-mist"] },
         "headingFont": { "perfect": "quicksand", "alsoWorks": ["playfair-display"] },
         "style": { "perfect": "soft-rounded", "alsoWorks": ["minimal"] },
-        "pictures": { "perfect": "leaves-and-lotus", "alsoWorks": ["calm-beach"] },
+        "pictures": { "perfect": "leaves-and-lotus", "alsoWorks": ["calm-beach", "teapot-and-cups"] },
         "decoration": { "heroDecor": ["squiggle", "none"], "patterns": ["none", "waves"] },
         "mustHave": "features"
       },
