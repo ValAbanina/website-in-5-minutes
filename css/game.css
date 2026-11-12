@@ -569,11 +569,21 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 .screen-timesup .timer { margin-left: auto; }
 
 .program-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.program { background: var(--color-surface-default); border: var(--border-ui); border-radius: 24px; overflow: hidden; filter: drop-shadow(var(--shadow-card)); display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; }
-.program .btn + .text-btn { margin-top: 4px; }
-.program-mark { height: 36px; width: auto; margin: 12px 16px 0; align-self: flex-start; }
-.program-tag { margin: 0; padding: 10px 16px; background: var(--color-brand-primary); color: var(--color-brand-on-primary); font: var(--type-label); }
-.program h2, .program p, .program .chips, .program .btn, .program .text-btn { margin-left: 16px; margin-right: 16px; }
+/* Program cards: an illustrated colour band, then the details; buttons line up at the bottom */
+.program { --prog: var(--color-brand-primary); --prog-on: #fff; background: var(--color-surface-default); border: var(--border-ui); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow-card); display: flex; flex-direction: column; transition: transform 160ms ease; }
+.program:hover { transform: translateY(-4px) rotate(-.6deg); }
+.program-art { position: relative; border-bottom: var(--border-ui); background: color-mix(in srgb, var(--prog) 22%, #fff); }
+.program-art img { display: block; width: 100%; height: auto; aspect-ratio: 320 / 150; }
+.program-tag { position: absolute; left: 14px; bottom: -14px; margin: 0; padding: 5px 12px; background: var(--prog); color: var(--prog-on); border: var(--border-ui); border-radius: var(--radius-pill); font: var(--type-label); transform: rotate(-2deg); box-shadow: 2px 2px 0 #000; }
+.program-body { display: flex; flex-direction: column; gap: 10px; padding: 28px 18px 18px; flex: 1; }
+.program-mark { height: 34px; width: auto; align-self: flex-start; }
+.program h2 { margin: 0; }
+.program p { margin: 0; }
+.program .chips { margin: 2px 0 0; }
+.program .chips li { border-color: var(--prog); background: color-mix(in srgb, var(--prog) 12%, #fff); }
+.program-actions { margin-top: auto; padding-top: 8px; display: grid; gap: 6px; }
+.program .btn-primary { background: var(--prog); color: var(--prog-on); justify-content: center; text-align: center; }
+.program .text-btn { justify-self: start; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }
 .chips li { border: var(--border-ui); border-radius: var(--radius-pill); padding: 6px 10px; background: var(--color-surface-default); }
 .learn-foot { display: flex; justify-content: space-between; gap: 16px; align-items: end; margin-top: 24px; }
@@ -645,7 +655,7 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 .moment-slide { animation: fade-up var(--dur-screen) var(--ease-out) .08s both; }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn:hover, .pill:hover, .btn:active, .pill:active, .card.is-on { transform: none; transition: none; }
+  .btn:hover, .pill:hover, .btn:active, .pill:active, .card.is-on, .program:hover { transform: none; transition: none; }
   .dock-bubble .bubble { animation: none; }
   .client-dock, .meter-fill { transition: none; }
   .timer.is-panic { animation: none; }

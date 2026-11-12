@@ -9,16 +9,23 @@ export function render(state, game) {
   const cards = game.programs.map((program) => {
     const session = infoUrl(config, program);
     const learns = program.learn.map((item) => `<li>${esc(item)}</li>`).join('');
-    return `<article class="program" data-program="${esc(program.id)}">
-      <p class="program-tag">${esc(program.tagline)}</p>
-      <img class="program-mark" src="assets/svg/logos/${esc(program.id)}-on-light.svg" alt="">
-      <h2>${esc(program.name)}</h2>
-      <p>${esc(program.description)}</p>
-      <ul class="chips">${learns}</ul>
-      <a class="btn btn-primary" data-program="${esc(program.id)}" data-action="explore" href="${esc(program.url)}" target="_blank" rel="noopener">Explore ${esc(EXPLORE[program.id] || program.name)}</a>
-      ${session
-        ? `<a class="text-btn" data-program="${esc(program.id)}" data-action="info-session" href="${esc(session)}" target="_blank" rel="noopener">Book an info session</a>`
-        : ''}
+    return `<article class="program" data-program="${esc(program.id)}" style="--prog:${esc(program.color)};--prog-on:${esc(program.onColor || '#000')}">
+      <div class="program-art">
+        <img src="assets/svg/programs/${esc(program.id)}.svg" alt="">
+        <p class="program-tag">${esc(program.tagline)}</p>
+      </div>
+      <div class="program-body">
+        <img class="program-mark" src="assets/svg/logos/${esc(program.id)}-on-light.svg" alt="">
+        <h2>${esc(program.name)}</h2>
+        <p>${esc(program.description)}</p>
+        <ul class="chips">${learns}</ul>
+        <div class="program-actions">
+          <a class="btn btn-primary" data-program="${esc(program.id)}" data-action="explore" href="${esc(program.url)}" target="_blank" rel="noopener">Explore ${esc(EXPLORE[program.id] || program.name)}</a>
+          ${session
+            ? `<a class="text-btn" data-program="${esc(program.id)}" data-action="info-session" href="${esc(session)}" target="_blank" rel="noopener">Book an info session</a>`
+            : ''}
+        </div>
+      </div>
     </article>`;
   }).join('');
   return `<div class="screen screen-light">
@@ -31,7 +38,7 @@ export function render(state, game) {
     </header>
     <div class="learn">
       <h1>What kind of designer will you be?</h1>
-      <p class="lede">You just did what designers do every day: read a client, chose type and colour on purpose, and built something that works. Here is where you can learn it properly.</p>
+      <p class="lede">You just did what designers do every day: read a client brief, chose type and colour on purpose, and built something that works. Here is where you can learn it properly.</p>
       <div class="program-row">${cards}</div>
       <div class="learn-foot">
         <div>
