@@ -565,15 +565,25 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 .stamp.is-in { animation: stamp 420ms var(--ease-stamp) both; }
 
 .timesup { display: grid; grid-template-columns: .8fr 1.2fr; gap: 24px; align-items: center; padding: 24px; }
-.deadline-art { width: min(280px, 70vw); }
+.deadline-art { width: min(220px, 56vw); }
 .screen-timesup .timer { margin-left: auto; }
 
 .program-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.program { background: var(--color-surface-default); border: var(--border-ui); border-radius: 24px; overflow: hidden; filter: drop-shadow(var(--shadow-card)); display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; }
-.program .btn + .text-btn { margin-top: 4px; }
-.program-mark { height: 36px; width: auto; margin: 12px 16px 0; align-self: flex-start; }
-.program-tag { margin: 0; padding: 10px 16px; background: var(--color-brand-primary); color: var(--color-brand-on-primary); font: var(--type-label); }
-.program h2, .program p, .program .chips, .program .btn, .program .text-btn { margin-left: 16px; margin-right: 16px; }
+/* Program cards: an illustrated colour band, then the details; buttons line up at the bottom */
+.program { --prog: var(--color-brand-primary); --prog-on: #fff; background: var(--color-surface-default); border: var(--border-ui); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow-card); display: flex; flex-direction: column; transition: transform 160ms ease; }
+.program:hover { transform: translateY(-4px) rotate(-.6deg); }
+.program-art { position: relative; border-bottom: var(--border-ui); background: color-mix(in srgb, var(--prog) 22%, #fff); }
+.program-art img { display: block; width: 100%; height: auto; aspect-ratio: 320 / 150; }
+.program-tag { position: absolute; left: 14px; bottom: -14px; margin: 0; padding: 5px 12px; background: var(--prog); color: var(--prog-on); border: var(--border-ui); border-radius: var(--radius-pill); font: var(--type-label); transform: rotate(-2deg); box-shadow: 2px 2px 0 #000; }
+.program-body { display: flex; flex-direction: column; gap: 10px; padding: 28px 18px 18px; flex: 1; }
+.program-mark { height: 34px; width: auto; align-self: flex-start; }
+.program h2 { margin: 0; }
+.program p { margin: 0; }
+.program .chips { margin: 2px 0 0; }
+.program .chips li { border-color: var(--prog); background: color-mix(in srgb, var(--prog) 12%, #fff); }
+.program-actions { margin-top: auto; padding-top: 8px; display: grid; gap: 6px; }
+.program .btn-primary { background: var(--prog); color: var(--prog-on); justify-content: center; text-align: center; }
+.program .text-btn { justify-self: start; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }
 .chips li { border: var(--border-ui); border-radius: var(--radius-pill); padding: 6px 10px; background: var(--color-surface-default); }
 .learn-foot { display: flex; justify-content: space-between; gap: 16px; align-items: end; margin-top: 24px; }
@@ -585,6 +595,25 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 .modal-small { width: min(460px, 100%); }
 .modal-small .modal-foot { justify-content: flex-end; margin-top: 8px; }
 .modal-head, .modal-foot { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+/* Re-read the brief: the client sits on the right in three-quarter view, facing the brief */
+.reread { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 20px; align-items: end; margin: 16px 0 20px; }
+.reread-text { display: grid; gap: 14px; align-self: center; }
+.reread .bubble-lg { max-width: none; }
+.reread .bubble::after {
+  content: "";
+  position: absolute;
+  right: -11px;
+  bottom: 28px;
+  width: 18px;
+  height: 18px;
+  background: var(--color-surface-default);
+  border-top: var(--border-ui);
+  border-right: var(--border-ui);
+  transform: rotate(45deg);
+}
+.reread-note { margin: 0; color: var(--color-text-default, inherit); }
+.reread-art { background: var(--card); border: var(--border-ui); border-radius: var(--radius-md, 16px); overflow: hidden; display: flex; align-items: flex-end; }
+.reread-art .char { width: 100%; }
 .howto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .howto-grid article { background: var(--color-surface-muted); border-radius: var(--radius-md); padding: 12px; display: flex; gap: 8px; }
 .howto-n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--color-text-strong); color: var(--color-text-on-dark); font: var(--type-label); flex: none; }
@@ -626,7 +655,7 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 .moment-slide { animation: fade-up var(--dur-screen) var(--ease-out) .08s both; }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn:hover, .pill:hover, .btn:active, .pill:active, .card.is-on { transform: none; transition: none; }
+  .btn:hover, .pill:hover, .btn:active, .pill:active, .card.is-on, .program:hover { transform: none; transition: none; }
   .dock-bubble .bubble { animation: none; }
   .client-dock, .meter-fill { transition: none; }
   .timer.is-panic { animation: none; }
@@ -691,6 +720,13 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 }
 
 @media (max-width: 767px) {
+  /* Mobile: the client and their note on top, the brief below with its tail pointing up at them */
+  .reread { grid-template-columns: minmax(0, 1fr) 104px; gap: 14px 12px; margin: 12px 0 16px; align-items: end; }
+  .reread-text { display: contents; }
+  .reread-note { grid-column: 1; grid-row: 1; align-self: center; }
+  .reread-art { grid-column: 2; grid-row: 1; }
+  .reread .bubble-lg { grid-column: 1 / -1; grid-row: 2; }
+  .reread .bubble::after { top: -11px; right: 42px; bottom: auto; border-top: var(--border-ui); border-left: var(--border-ui); border-right: 0; }
   h1, body[data-screen="attract"] h1, body[data-screen="start"] h1, body[data-screen="timesup"] h1 {
     font: 800 42px/0.95 var(--font-display);
   }
@@ -768,7 +804,7 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
   body[data-ink="light"] .brief-who .role,
   body[data-ink="light"] .brief-go p { color: var(--color-text-on-dark); }
   .verdict-art { width: min(220px, 56vw); }
-  .deadline-art { width: min(220px, 56vw); }
+  .deadline-art { width: min(176px, 45vw); }
 }
 
 @media (min-width: 768px) {

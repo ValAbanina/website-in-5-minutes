@@ -45,8 +45,13 @@ export function reread(client) {
         <h2 id="brief-title">${esc(client.name)}'s brief</h2>
         <button type="button" class="icon-btn" data-action="close-brief" aria-label="Close">×</button>
       </header>
-      <p class="bubble bubble-lg">${esc(client.brief)}</p>
-      <p>${esc(client.personality)}</p>
+      <div class="reread" style="--card:${esc(client.color)}">
+        <div class="reread-text">
+          <p class="bubble bubble-lg">${esc(client.brief)}</p>
+          <p class="reread-note">${esc(client.personality)}</p>
+        </div>
+        <div class="reread-art">${characterHTML(client.id, 'turned')}</div>
+      </div>
       <footer class="modal-foot">
         <button type="button" class="btn btn-primary" data-action="close-brief">Back to building</button>
       </footer>
