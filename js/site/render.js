@@ -24,14 +24,17 @@ function copyFor(client, type) {
   return client.site?.[key] || {};
 }
 
+/* In the builder, tapping any picture opens the Images tab so the player can choose one. */
+const PICK = 'data-action="set-tab" data-tab="images" title="Choose a picture"';
+
 function pictureFigure(game, pictureId) {
   if (!pictureId) {
-    return `<figure class="pic pic-empty"><span class="pic-fallback"><span>Picture</span><strong>Choose one</strong></span></figure>`;
+    return `<figure class="pic pic-empty" ${PICK}><span class="pic-fallback"><span>Picture</span><strong>Choose one</strong></span></figure>`;
   }
   const pic = game.kit.pictures.find((p) => p.id === pictureId);
   const name = pic?.name || pictureId;
-  const kind = pic?.kind === 'photo' ? 'Photo' : 'Picture';
-  return `<figure class="pic">
+  const kind = 'Picture';
+  return `<figure class="pic" ${PICK}>
     <img src="assets/svg/pictures/${esc(pictureId)}.svg" alt="${esc(name)}">
     <span class="pic-fallback"><span>${esc(kind)}</span><strong>${esc(name)}</strong></span>
   </figure>`;

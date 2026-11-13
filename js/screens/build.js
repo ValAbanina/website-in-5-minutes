@@ -214,7 +214,7 @@ function panelBody(state, game) {
       state.picture === p.id,
       'picture',
       p.id,
-      `<span class="pic-mini"><img src="assets/svg/pictures/${esc(p.id)}.svg" alt=""><span>${esc(p.kind === 'photo' ? 'Photo' : 'Picture')}</span></span>`,
+      `<span class="pic-mini"><img src="assets/svg/pictures/${esc(p.id)}.svg" alt=""></span>`,
       p.name,
     )).join('');
     return `<h2>Images</h2><p>One picture is used across the page.</p><div class="choice-grid choice-grid-pics">${chips}</div>`;

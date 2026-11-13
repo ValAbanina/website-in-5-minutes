@@ -336,7 +336,7 @@ function onClick(event) {
     store.set({ tab: build.STEPS[Math.min(at + 1, build.STEPS.length - 1)], choiceKey: null, selectedSection: null });
     sheet?.peek();
   }
-  else if (action === 'set-tab') store.set({ tab: btn.dataset.tab, choiceKey: null });
+  else if (action === 'set-tab') store.set({ tab: btn.dataset.tab, choiceKey: null, overview: false });
   else if (action === 'set-preview') store.set({ previewMode: btn.dataset.preview });
   else if (action === 'undo') {
     const prev = state;
