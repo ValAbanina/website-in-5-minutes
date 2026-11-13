@@ -19,7 +19,7 @@ export function prefersReducedMotion() {
 export function deviceKind() {
   const w = window.innerWidth;
   if (w < 768) return 'phone';
-  if (w < 1200) return 'tablet';
+  if (w < 1024) return 'tablet';
   return 'desktop';
 }
 

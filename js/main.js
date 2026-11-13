@@ -27,6 +27,7 @@ let castIndex = 0;
 let lastFocus = null;
 let skipClick = false;
 let dragBound = false;
+let sheet = null;
 
 function view(state) {
   return { ...state, canUndo: store.canUndo(), canRedo: store.canRedo() };
@@ -308,7 +309,11 @@ function onClick(event) {
     store.set({ briefOpen: true });
   }
   else if (action === 'add-section') addSection(btn.dataset.type);
-  else if (action === 'select-section') store.set({ selectedSection: Number(btn.dataset.index) });
+  else if (action === 'select-section') {
+    store.set({ selectedSection: Number(btn.dataset.index), overview: false });
+    sheet?.peek();
+  } else if (action === 'deselect') store.set({ selectedSection: null });
+  else if (action === 'toggle-overview') store.set({ overview: !state.overview });
   else if (action === 'remove-section') {
     const prev = state;
     const index = state.selectedSection ?? 0;
@@ -320,8 +325,18 @@ function onClick(event) {
   } else if (action === 'move-section') moveSection(Number(btn.dataset.dir));
   else if (action === 'set-layout') setLayout(btn.dataset.layout);
   else if (action === 'set-columns') setColumns(Number(btn.dataset.columns));
-  else if (action === 'set-choice') setChoice(btn.dataset.key, btn.dataset.value);
-  else if (action === 'set-tab') store.set({ tab: btn.dataset.tab });
+  else if (action === 'set-choice') {
+    setChoice(btn.dataset.key, btn.dataset.value);
+    sheet?.peek();
+  } else if (action === 'cycle-choice') cycleChoice(Number(btn.dataset.dir));
+  else if (action === 'set-list') store.set({ choiceKey: btn.dataset.key });
+  else if (action === 'open-all') sheet?.open('half');
+  else if (action === 'next-step') {
+    const at = build.STEPS.indexOf(state.tab);
+    store.set({ tab: build.STEPS[Math.min(at + 1, build.STEPS.length - 1)], choiceKey: null, selectedSection: null });
+    sheet?.peek();
+  }
+  else if (action === 'set-tab') store.set({ tab: btn.dataset.tab, choiceKey: null });
   else if (action === 'set-preview') store.set({ previewMode: btn.dataset.preview });
   else if (action === 'undo') {
     const prev = state;
@@ -406,6 +421,13 @@ function setColumns(columns) {
   store.set({ sections }, { history: true });
   rememberDesign(prev);
   stats.send('section_changed', { action: 'columns', section: sections[index].type, layout: sections[index].layout || '', columns });
+}
+
+function cycleChoice(dir) {
+  const next = build.cycleValue(store.get(), game, dir);
+  if (!next) return;
+  build.noteCycle(dir, next.name);
+  setChoice(next.key, next.value);
 }
 
 function setChoice(key, value) {
@@ -551,6 +573,20 @@ function boot(data, cues) {
       onDrop,
       onDragStart() { skipClick = true; },
     });
+    build.bindTouchReorder(buildRoot, { onDrop });
+    build.bindSwipe(buildRoot, { getState: () => store.get(), onSwipe: cycleChoice });
+    sheet = build.bindSheet(buildRoot);
+    let fitting = 0;
+    const refit = () => {
+      window.cancelAnimationFrame(fitting);
+      fitting = window.requestAnimationFrame(() => {
+        const s = store.get();
+        if (s.screen === 'build') build.refit(buildRoot, s);
+      });
+    };
+    window.addEventListener('resize', refit);
+    buildRoot.addEventListener('load', refit, true);
+    buildRoot.addEventListener('transitionend', (e) => { if (e.target.id === 'build-panel') refit(); });
     dragBound = true;
   }
 
