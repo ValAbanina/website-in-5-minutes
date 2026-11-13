@@ -21,7 +21,13 @@ This is the brief for the coding agent in Cursor. Work through the milestones **
   - Every sound has a visual twin, and the game is fully playable muted.
   - `prefers-reduced-motion` turns movement into fades.
 - **Copy:** use the copy from `game-data.json` and the Figma screens. Sentence case everywhere, except the verdict stamps (APPROVED / REVISIONS / MELTDOWN).
-- **Breakpoints:** phone below 768px, tablet 768–1199px, desktop 1200px and up. Designs exist for 390, 834 and 1440.
+- **Breakpoints (builder):**
+  - 1024px and up: three columns (sections, website, options). 1024–1199px uses narrower side columns and icon tabs.
+  - Below 1024px, and phones held sideways: website plus one options panel on the right; Sections is the first tab.
+  - Phones held upright (below 744px): website first, options in a bottom panel that rests small, half or full height. Drag or tap its handle.
+  - Other screens keep phone below 768px, tablet 768–1199px, desktop 1200px and up. Designs exist for 390, 834 and 1440.
+- **Website preview** follows the width of its preview window (container query at 620px), not the player's screen. "Whole page" lays it out at 1200px and shrinks it to fit.
+- **Touch:** press and hold a section in the preview, then drag to move it. The page can be added to the home screen and opens full screen (`manifest.webmanifest`).
 
 ## 1 · Project skeleton
 Create:

@@ -80,6 +80,7 @@ export function sectionBar(state, game) {
       <button type="button" class="bar-btn" data-action="move-section" data-dir="-1" aria-label="Move section up" ${index === 0 ? 'disabled' : ''}>↑</button>
       <button type="button" class="bar-btn" data-action="move-section" data-dir="1" aria-label="Move section down" ${index === total - 1 ? 'disabled' : ''}>↓</button>
       <button type="button" class="bar-btn" data-action="remove-section" aria-label="Remove section">×</button>
+      <button type="button" class="bar-done" data-action="deselect">Done</button>
     </span>
   </div>`;
 }
@@ -305,8 +306,30 @@ export function browserShell(state, client, siteHtml) {
     .split('-')
     .slice(0, 3)
     .join('-');
+  const page = state.overview
+    ? `<div class="browser-page is-overview" data-dropzone><div class="overview-holder"><div class="overview-scale">${siteHtml}</div></div></div>`
+    : `<div class="browser-page" data-dropzone>${siteHtml}</div>`;
   return `<div class="browser ${state.previewMode === 'mobile' ? 'is-phone' : ''}">
     <div class="browser-bar"><span>${esc(host || 'preview')}.ca</span></div>
-    <div class="browser-page" data-dropzone>${siteHtml}</div>
+    ${page}
   </div>`;
+}
+
+/**
+ * Whole-page view: lay the website out at a real desktop width, then shrink it
+ * until the full page fits inside the preview, so players can judge the whole design.
+ */
+export function fitOverview(page, mobile) {
+  const holder = page?.querySelector('.overview-holder');
+  const scale = page?.querySelector('.overview-scale');
+  if (!holder || !scale) return;
+  const width = mobile ? 390 : 1200;
+  scale.style.width = `${width}px`;
+  scale.style.transform = 'none';
+  const height = Math.max(scale.offsetHeight, 200);
+  const room = { w: page.clientWidth - 24, h: page.clientHeight - 24 };
+  const s = Math.max(0.05, Math.min(room.w / width, room.h / height, 1));
+  scale.style.transform = `scale(${s})`;
+  holder.style.width = `${Math.floor(width * s)}px`;
+  holder.style.height = `${Math.floor(height * s)}px`;
 }

@@ -27,6 +27,7 @@ let castIndex = 0;
 let lastFocus = null;
 let skipClick = false;
 let dragBound = false;
+let sheet = null;
 
 function view(state) {
   return { ...state, canUndo: store.canUndo(), canRedo: store.canRedo() };
@@ -308,7 +309,11 @@ function onClick(event) {
     store.set({ briefOpen: true });
   }
   else if (action === 'add-section') addSection(btn.dataset.type);
-  else if (action === 'select-section') store.set({ selectedSection: Number(btn.dataset.index) });
+  else if (action === 'select-section') {
+    store.set({ selectedSection: Number(btn.dataset.index), overview: false });
+    sheet?.peek();
+  } else if (action === 'deselect') store.set({ selectedSection: null });
+  else if (action === 'toggle-overview') store.set({ overview: !state.overview });
   else if (action === 'remove-section') {
     const prev = state;
     const index = state.selectedSection ?? 0;
@@ -551,6 +556,19 @@ function boot(data, cues) {
       onDrop,
       onDragStart() { skipClick = true; },
     });
+    build.bindTouchReorder(buildRoot, { onDrop });
+    sheet = build.bindSheet(buildRoot);
+    let fitting = 0;
+    const refit = () => {
+      window.cancelAnimationFrame(fitting);
+      fitting = window.requestAnimationFrame(() => {
+        const s = store.get();
+        if (s.screen === 'build') build.refit(buildRoot, s);
+      });
+    };
+    window.addEventListener('resize', refit);
+    buildRoot.addEventListener('load', refit, true);
+    buildRoot.addEventListener('transitionend', (e) => { if (e.target.id === 'build-panel') refit(); });
     dragBound = true;
   }
 

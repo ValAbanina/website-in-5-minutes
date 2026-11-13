@@ -227,7 +227,9 @@
   to { transform: translateX(-50%); }
 }
 
-@media (max-width: 767px) {
+/* The website follows the width of its preview window, not the width of the player's screen. */
+.browser-page, .overview-scale { container-type: inline-size; }
+@container (max-width: 620px) {
   .site .cols,
   .site .hero-split,
   .site .split,

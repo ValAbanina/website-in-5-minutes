@@ -2,7 +2,7 @@ import { esc, firstName, prefersReducedMotion } from '../dom.js';
 import { logo, muteButton, progress, meterBlock, timerBlock } from '../chrome.js';
 import { characterHTML } from '../characters.js';
 import { score } from '../scoring.js';
-import { browserShell, renderSite, columnOptions, sectionBar } from '../site/render.js';
+import { browserShell, renderSite, columnOptions, sectionBar, fitOverview } from '../site/render.js';
 
 const TABS = [
   ['colour', 'Colour'],
@@ -11,6 +11,32 @@ const TABS = [
   ['images', 'Images'],
   ['decor', 'Decor'],
 ];
+
+/** Small line icons for the tool row on phones and tablets. */
+const ICONS = {
+  sections: '<rect x="4" y="4" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="16" width="16" height="4" rx="1"/>',
+  colour: '<path d="M12 3a9 9 0 0 0 0 18c1.4 0 2-1 2-2s-1-1.6-1-2.6S13.8 15 15 15h2a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1.3"/><circle cx="10.5" cy="7" r="1.3"/><circle cx="15.5" cy="8" r="1.3"/>',
+  type: '<path d="M3 19 8 5h1l5 14M5 14h7"/><path d="M15 12.5c.6-1 1.6-1.5 2.8-1.5 1.7 0 2.7 1 2.7 2.7V19M20.5 15.5c-3.5-.3-5.5.4-5.5 2 0 1 .8 1.7 2 1.7 1.8 0 3.5-1.4 3.5-3.2"/>',
+  style: '<rect x="4" y="4" width="16" height="16" rx="5"/><path d="M8 15h8"/>',
+  images: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/>',
+  decor: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
+  redo: '<path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/>',
+  whole: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><rect x="8" y="8" width="8" height="8" rx="1"/>',
+};
+
+function icon(name) {
+  return `<svg class="ico" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+}
+
+/** Resting heights of the options panel on phones: a peek row, half the screen, or nearly all of it. */
+const SNAPS = ['peek', 'half', 'full'];
+const SNAP_WORDS = { peek: 'small', half: 'half height', full: 'full height' };
+let sheetSnap = 'peek';
+
+function grabberLabel() {
+  return `Options panel is ${SNAP_WORDS[sheetSnap]}. Tap to resize, or drag.`;
+}
 
 function choice(on, key, value, inner, label) {
   return `<button type="button" class="choice${on ? ' is-on' : ''}" data-action="set-choice" data-key="${esc(key)}" data-value="${esc(value)}" aria-pressed="${on}">
@@ -69,7 +95,14 @@ export function dockHTML(state, client, result) {
 }
 
 function panelBody(state, game) {
-  if (state.tab === 'sections') return `<div class="sheet-only">${libraryHTML(state, game.clients.find((c) => c.id === state.clientId), game)}<button type="button" class="text-btn" data-action="open-brief">Re-read the brief</button></div>`;
+  if (state.tab === 'sections') {
+    return `<div class="sheet-only">${libraryHTML(state, game.clients.find((c) => c.id === state.clientId), game)}
+      <div class="sheet-extras">
+        <button type="button" class="text-btn" data-action="open-brief">Re-read the brief</button>
+        <button type="button" class="text-btn" data-action="restart-design">Start over</button>
+      </div>
+    </div>`;
+  }
   if (state.tab === 'type') {
     const heads = game.kit.headingFonts.map((f) => choice(
       state.heading === f.id,
@@ -134,6 +167,7 @@ function designKey(state) {
     heroDecor: state.heroDecor,
     pattern: state.pattern,
     previewMode: state.previewMode,
+    overview: state.overview,
   });
 }
 
@@ -143,7 +177,7 @@ export function render(state, game, client) {
   const live = liveMood(state, result);
   const tabs = [['sections', 'Sections'], ...TABS].map(([id, label]) => {
     const on = state.tab === id;
-    return `<button type="button" class="tab${on ? ' is-on' : ''}${id === 'sections' ? ' tab-sections' : ''}" data-action="set-tab" data-tab="${id}" aria-selected="${on}" role="tab">${label}</button>`;
+    return `<button type="button" class="tab${on ? ' is-on' : ''}${id === 'sections' ? ' tab-sections' : ''}" data-action="set-tab" data-tab="${id}" aria-selected="${on}" role="tab">${icon(id)}<span class="tab-l">${label}</span></button>`;
   }).join('');
   return `<div class="screen screen-build">
     <header class="topbar build-bar">
@@ -152,8 +186,12 @@ export function render(state, game, client) {
       <div class="build-status">
         <div id="build-meter">${meterBlock(client, result, live.label)}</div>
         <div id="build-timer">${timerBlock(state.timeLeft, game.meta)}</div>
-        <button type="button" class="btn btn-primary btn-send" data-action="send"><span class="send-long">Send to ${esc(who)}</span><span class="send-short">Send</span></button>
+        <span class="bar-history">
+          <button type="button" class="icon-btn icon-btn-plain" data-action="undo" aria-label="Undo" ${state.canUndo ? '' : 'disabled'}>${icon('undo')}</button>
+          <button type="button" class="icon-btn icon-btn-plain bar-redo" data-action="redo" aria-label="Redo" ${state.canRedo ? '' : 'disabled'}>${icon('redo')}</button>
+        </span>
         ${muteButton(state.muted)}
+        <button type="button" class="btn btn-primary btn-send" data-action="send"><span class="send-long">Send to ${esc(who)}</span><span class="send-short">Send</span></button>
       </div>
     </header>
     <div class="builder">
@@ -163,21 +201,33 @@ export function render(state, game, client) {
           <button type="button" class="btn btn-small" data-action="undo" ${state.canUndo ? '' : 'disabled'}>Undo</button>
           <button type="button" class="btn btn-small" data-action="redo" ${state.canRedo ? '' : 'disabled'}>Redo</button>
           <button type="button" class="btn btn-small" data-action="restart-design">Start over</button>
-          <div class="seg preview-toggle" role="group" aria-label="Preview width">
-            <button type="button" data-action="set-preview" data-preview="desktop" aria-pressed="${state.previewMode !== 'mobile'}">Desktop</button>
-            <button type="button" data-action="set-preview" data-preview="mobile" aria-pressed="${state.previewMode === 'mobile'}">Mobile</button>
-          </div>
         </div>
         <div class="section-bar" id="build-section-bar">${sectionBar(state, game)}</div>
-        <div id="build-preview">${browserShell(state, client, renderSite(state, client, game))}</div>
+        <div class="preview-wrap">
+          <div id="build-preview">${browserShell(state, client, renderSite(state, client, game))}</div>
+          <div class="preview-float">
+            <button type="button" class="float-btn" data-action="toggle-overview" aria-pressed="${!!state.overview}">${icon('whole')}<span>Whole page</span></button>
+            <div class="seg preview-toggle" role="group" aria-label="Preview width">
+              <button type="button" data-action="set-preview" data-preview="desktop" aria-pressed="${state.previewMode !== 'mobile'}">Desktop</button>
+              <button type="button" data-action="set-preview" data-preview="mobile" aria-pressed="${state.previewMode === 'mobile'}">Mobile</button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="client-dock${state.comment ? ' is-talking' : ''}" id="build-client">${dockHTML(state, client, result)}</div>
-      <aside class="panel" id="build-panel" data-tab="${esc(state.tab)}" aria-label="Style options">
+      <aside class="panel" id="build-panel" data-tab="${esc(state.tab)}" data-snap="${sheetSnap}" aria-label="Style options">
+        <button type="button" class="sheet-grabber" data-sheet-grabber aria-label="${grabberLabel()}"><span aria-hidden="true"></span></button>
         <div class="tabs" role="tablist">${tabs}</div>
         <div class="panel-body" id="build-panel-body">${panelBody(state, game)}</div>
       </aside>
     </div>
   </div>`;
+}
+
+/** Re-fit the whole-page view, e.g. after a resize or once pictures have loaded. */
+export function refit(root, state) {
+  if (!state.overview) return;
+  fitOverview(root?.querySelector('.browser-page.is-overview'), state.previewMode === 'mobile');
 }
 
 function focusKey(el) {
@@ -235,10 +285,11 @@ export function sync(root, state, prev, game, client, history) {
       const keepScroll = oldPage?.scrollTop || 0;
       preview.innerHTML = browserShell(state, client, renderSite(state, client, game));
       const page = preview.querySelector('.browser-page');
-      if (page) page.scrollTop = keepScroll;
+      if (state.overview) fitOverview(page, state.previewMode === 'mobile');
+      else if (page && !prev.overview) page.scrollTop = keepScroll;
       const moved = state.selectedSection !== prev.selectedSection || state.sections.length !== prev.sections.length;
       const block = page?.querySelector('.block.is-selected');
-      if (moved && page && block) {
+      if (moved && page && block && !state.overview) {
         const top = block.getBoundingClientRect().top - page.getBoundingClientRect().top + page.scrollTop;
         page.scrollTo({ top: Math.max(0, top - 12), behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
       }
@@ -257,11 +308,13 @@ export function sync(root, state, prev, game, client, history) {
     if (tileType && tileHome) tileHome.querySelector(`.section-tile[data-type="${tileType}"]`)?.focus();
 
     paintDock(root, state, client, result);
-    const undo = root.querySelector('#build-undo');
-    if (undo) {
-      undo.querySelector('[data-action="undo"]').disabled = !history.canUndo();
-      undo.querySelector('[data-action="redo"]').disabled = !history.canRedo();
-    }
+    root.querySelectorAll('[data-action="undo"]').forEach((btn) => { btn.disabled = !history.canUndo(); });
+    root.querySelectorAll('[data-action="redo"]').forEach((btn) => { btn.disabled = !history.canRedo(); });
+    const whole = root.querySelector('[data-action="toggle-overview"]');
+    if (whole) whole.setAttribute('aria-pressed', String(!!state.overview));
+    root.querySelectorAll('.preview-toggle button').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String((btn.dataset.preview === 'mobile') === (state.previewMode === 'mobile')));
+    });
   } else if (state.comment !== prev.comment) {
     paintDock(root, state, client, score(state, client, game));
   }
@@ -330,5 +383,177 @@ export function bindDrag(root, handlers) {
       from: from === '' ? null : Number(from),
       targetIndex: target ? Number(target.dataset.index) : null,
     });
+  });
+}
+
+/** Phones in portrait get the resizable bottom panel; everything else keeps a fixed panel. */
+export const COMPACT_QUERY = '(max-width: 743px) and (orientation: portrait)';
+
+/**
+ * The options panel on phones rests at three heights. Tap the handle to step through them,
+ * or drag it and let go near the height you want.
+ */
+export function bindSheet(root) {
+  let drag = null;
+  let skipClick = false;
+  const panelOf = () => root.querySelector('#build-panel');
+  const compact = () => window.matchMedia(COMPACT_QUERY).matches;
+
+  function setSnap(name, panel = panelOf()) {
+    sheetSnap = name;
+    if (!panel) return;
+    panel.dataset.snap = name;
+    panel.style.height = '';
+    panel.querySelector('[data-sheet-grabber]')?.setAttribute('aria-label', grabberLabel());
+    const body = panel.querySelector('.panel-body');
+    if (body) { body.scrollTop = 0; body.scrollLeft = 0; }
+  }
+
+  root.addEventListener('pointerdown', (e) => {
+    const grabber = e.target.closest('[data-sheet-grabber]');
+    if (!grabber || !compact()) return;
+    const panel = panelOf();
+    drag = { y: e.clientY, h: panel.offsetHeight, moved: false, id: e.pointerId };
+    grabber.setPointerCapture?.(e.pointerId);
+    panel.classList.add('is-dragging');
+  });
+  root.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dy = e.clientY - drag.y;
+    if (Math.abs(dy) > 6) drag.moved = true;
+    if (!drag.moved) return;
+    const max = window.innerHeight - 96;
+    panelOf().style.height = `${Math.max(140, Math.min(max, drag.h - dy))}px`;
+  });
+  const end = (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const panel = panelOf();
+    const { moved } = drag;
+    drag = null;
+    if (!moved) {
+      panel.classList.remove('is-dragging');
+      return;
+    }
+    skipClick = true;
+    const current = panel.offsetHeight;
+    const inline = panel.style.height;
+    let best = sheetSnap;
+    let bestGap = Infinity;
+    SNAPS.forEach((name) => {
+      panel.style.height = '';
+      panel.dataset.snap = name;
+      const gap = Math.abs(panel.offsetHeight - current);
+      if (gap < bestGap) { bestGap = gap; best = name; }
+    });
+    panel.dataset.snap = sheetSnap;
+    panel.style.height = inline;
+    void panel.offsetHeight;
+    panel.classList.remove('is-dragging');
+    setSnap(best, panel);
+  };
+  root.addEventListener('pointerup', end);
+  root.addEventListener('pointercancel', end);
+  root.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-sheet-grabber]')) return;
+    if (skipClick) { skipClick = false; return; }
+    const next = SNAPS[(SNAPS.indexOf(sheetSnap) + 1) % SNAPS.length];
+    setSnap(next);
+  });
+
+  return {
+    /** Make room to see the website again, e.g. after picking a section to edit. */
+    peek() { if (compact() && sheetSnap !== 'peek') setSnap('peek'); },
+  };
+}
+
+/**
+ * Touch screens: press and hold a section in the preview, then drag it up or down to move it.
+ * A quick swipe still scrolls the page as normal.
+ */
+export function bindTouchReorder(root, { onDrop, onStart }) {
+  let press = null;
+  let lift = null;
+  let frame = 0;
+
+  const clearMarks = () => root.querySelectorAll('.is-drop-before, .is-drop-after, .is-drop-end')
+    .forEach((el) => el.classList.remove('is-drop-before', 'is-drop-after', 'is-drop-end'));
+
+  function mark(x, y) {
+    clearMarks();
+    const el = document.elementFromPoint(x, y);
+    const block = el?.closest?.('.browser-page .block');
+    if (!block || block === lift.block) {
+      lift.targetIndex = block === lift.block ? lift.from : lift.targetIndex;
+      return;
+    }
+    const box = block.getBoundingClientRect();
+    const index = Number(block.dataset.index);
+    const after = y > box.top + box.height / 2;
+    block.classList.add(after ? 'is-drop-after' : 'is-drop-before');
+    lift.targetIndex = after ? index + 1 : index;
+  }
+
+  function scrollLoop() {
+    if (!lift) return;
+    const box = lift.page.getBoundingClientRect();
+    const edge = 56;
+    let step = 0;
+    if (lift.y < box.top + edge) step = -10;
+    else if (lift.y > box.bottom - edge) step = 10;
+    if (step) {
+      lift.page.scrollTop += step;
+      mark(lift.x, lift.y);
+    }
+    frame = requestAnimationFrame(scrollLoop);
+  }
+
+  function cancelPress() {
+    if (press) window.clearTimeout(press.timer);
+    press = null;
+  }
+
+  root.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) { cancelPress(); return; }
+    const block = e.target.closest('.browser-page:not(.is-overview) .block');
+    if (!block) return;
+    const t = e.touches[0];
+    press = { x: t.clientX, y: t.clientY, block };
+    press.timer = window.setTimeout(() => {
+      const page = block.closest('.browser-page');
+      lift = { from: Number(block.dataset.index), block, page, targetIndex: Number(block.dataset.index), x: press.x, y: press.y };
+      press = null;
+      block.classList.add('is-lifting');
+      document.body.classList.add('is-reordering');
+      navigator.vibrate?.(12);
+      onStart?.();
+      frame = requestAnimationFrame(scrollLoop);
+    }, 450);
+  }, { passive: true });
+
+  root.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    if (press && Math.hypot(t.clientX - press.x, t.clientY - press.y) > 10) cancelPress();
+    if (!lift) return;
+    e.preventDefault();
+    lift.x = t.clientX;
+    lift.y = t.clientY;
+    mark(lift.x, lift.y);
+  }, { passive: false });
+
+  const finish = (drop) => {
+    cancelPress();
+    if (!lift) return;
+    cancelAnimationFrame(frame);
+    const { from, targetIndex, block } = lift;
+    lift = null;
+    clearMarks();
+    block.classList.remove('is-lifting');
+    document.body.classList.remove('is-reordering');
+    if (drop && targetIndex !== from && targetIndex !== from + 1) onDrop({ type: '', from, targetIndex });
+  };
+  root.addEventListener('touchend', () => finish(true));
+  root.addEventListener('touchcancel', () => finish(false));
+  root.addEventListener('contextmenu', (e) => {
+    if (e.target.closest('.browser-page .block')) e.preventDefault();
   });
 }
