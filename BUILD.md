@@ -24,7 +24,12 @@ This is the brief for the coding agent in Cursor. Work through the milestones **
 - **Breakpoints (builder):**
   - 1024px and up: three columns (sections, website, options). 1024–1199px uses narrower side columns and icon tabs.
   - Below 1024px, and phones held sideways: website plus one options panel on the right; Sections is the first tab.
-  - Phones held upright (below 744px): website first, options in a bottom panel that rests small, half or full height. Drag or tap its handle.
+  - Phones held upright (below 744px): guided steps. Sections → Colour → Type → Style → Images → Decor, with ticks on finished steps and Next (Send on the last step).
+    - The website is laid out at 680px and shrunk to the phone's width, so players see the real composition.
+    - Swipe left or right on the website (or tap ‹ ›) to try the next option for the step; up and down scroll. The name of the new choice flashes over the page.
+    - Type and Decor each have two lists, switched with a toggle above the choice bar.
+    - Tap the choice name, or pull up the handle, to see every option as a grid. Picking one closes the grid.
+    - Sections step: one swipeable row of sections to add; hold a section on the page and drag to move it.
   - Other screens keep phone below 768px, tablet 768–1199px, desktop 1200px and up. Designs exist for 390, 834 and 1440.
 - **Website preview** follows the width of its preview window (container query at 620px), not the player's screen. "Whole page" lays it out at 1200px and shrinks it to fit.
 - **Touch:** press and hold a section in the preview, then drag to move it. The page can be added to the home screen and opens full screen (`manifest.webmanifest`).

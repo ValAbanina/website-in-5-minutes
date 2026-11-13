@@ -306,30 +306,40 @@ export function browserShell(state, client, siteHtml) {
     .split('-')
     .slice(0, 3)
     .join('-');
-  const page = state.overview
-    ? `<div class="browser-page is-overview" data-dropzone><div class="overview-holder"><div class="overview-scale">${siteHtml}</div></div></div>`
-    : `<div class="browser-page" data-dropzone>${siteHtml}</div>`;
   return `<div class="browser ${state.previewMode === 'mobile' ? 'is-phone' : ''}">
     <div class="browser-bar"><span>${esc(host || 'preview')}.ca</span></div>
-    ${page}
+    <div class="browser-page${state.overview ? ' is-overview' : ''}" data-dropzone><div class="overview-holder"><div class="overview-scale">${siteHtml}</div></div></div>
   </div>`;
 }
 
 /**
- * Whole-page view: lay the website out at a real desktop width, then shrink it
- * until the full page fits inside the preview, so players can judge the whole design.
+ * How the website sits in its preview window:
+ * - "actual": real size at the preview's own width (desktop and tablets).
+ * - "width": laid out at a small desktop width and shrunk to fit the phone's width, scrolling down.
+ * - "page": the whole page shrunk until it fits, so players can judge the full design.
  */
-export function fitOverview(page, mobile) {
+export function applyZoom(page, mode, mobile) {
   const holder = page?.querySelector('.overview-holder');
   const scale = page?.querySelector('.overview-scale');
   if (!holder || !scale) return;
-  const width = mobile ? 390 : 1200;
+  page.classList.toggle('is-overview', mode === 'page');
+  page.classList.toggle('is-fitwidth', mode === 'width');
+  if (mode === 'actual') {
+    holder.removeAttribute('style');
+    scale.removeAttribute('style');
+    return;
+  }
+  let width = mode === 'width' ? 680 : 1200;
+  if (mobile) width = 390;
   scale.style.width = `${width}px`;
   scale.style.transform = 'none';
   const height = Math.max(scale.offsetHeight, 200);
-  const room = { w: page.clientWidth - 24, h: page.clientHeight - 24 };
-  const s = Math.max(0.05, Math.min(room.w / width, room.h / height, 1));
+  const pad = mode === 'page' ? 24 : 0;
+  const fitWidth = (page.clientWidth - pad) / width;
+  const s = mode === 'page'
+    ? Math.max(0.05, Math.min(fitWidth, (page.clientHeight - pad) / height, 1))
+    : Math.max(0.05, Math.min(fitWidth, 1));
   scale.style.transform = `scale(${s})`;
   holder.style.width = `${Math.floor(width * s)}px`;
-  holder.style.height = `${Math.floor(height * s)}px`;
+  holder.style.height = `${Math.ceil(height * s)}px`;
 }

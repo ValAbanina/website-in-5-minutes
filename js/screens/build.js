@@ -2,7 +2,7 @@ import { esc, firstName, prefersReducedMotion } from '../dom.js';
 import { logo, muteButton, progress, meterBlock, timerBlock } from '../chrome.js';
 import { characterHTML } from '../characters.js';
 import { score } from '../scoring.js';
-import { browserShell, renderSite, columnOptions, sectionBar, fitOverview } from '../site/render.js';
+import { browserShell, renderSite, columnOptions, sectionBar, applyZoom } from '../site/render.js';
 
 const TABS = [
   ['colour', 'Colour'],
@@ -27,6 +27,85 @@ const ICONS = {
 
 function icon(name) {
   return `<svg class="ico" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+}
+
+/** The order players work through on phones. */
+export const STEPS = ['sections', 'colour', 'type', 'style', 'images', 'decor'];
+
+/** What each step lets you swipe through. Type and Decor each hold two lists. */
+const STEP_LISTS = {
+  colour: [['palette', 'Colour', (kit) => kit.palettes]],
+  type: [['heading', 'Heading', (kit) => kit.headingFonts], ['body', 'Body text', (kit) => kit.bodyFonts]],
+  style: [['style', 'Style', (kit) => kit.styles]],
+  images: [['picture', 'Picture', (kit) => kit.pictures]],
+  decor: [['heroDecor', 'Hero decor', (kit) => kit.heroDecor], ['pattern', 'Pattern', (kit) => kit.sectionPatterns]],
+};
+
+function itemName(item) {
+  return item?.name || item?.family || item?.id || '';
+}
+
+export function currentList(state, game) {
+  const lists = STEP_LISTS[state.tab];
+  if (!lists) return null;
+  const entry = lists.find((l) => l[0] === state.choiceKey) || lists[0];
+  return { key: entry[0], label: entry[1], items: entry[2](game.kit), lists };
+}
+
+/** The next or previous option in the current step, wrapping round at the ends. */
+export function cycleValue(state, game, dir) {
+  const list = currentList(state, game);
+  if (!list) return null;
+  const ids = list.items.map((item) => item.id);
+  const at = ids.indexOf(state[list.key]);
+  const next = at < 0 ? (dir > 0 ? 0 : ids.length - 1) : (at + dir + ids.length) % ids.length;
+  return { key: list.key, value: ids[next], name: itemName(list.items[next]) };
+}
+
+export function stepDone(state, step) {
+  if (step === 'sections') return state.sections.length > 0;
+  if (step === 'colour') return !!state.palette;
+  if (step === 'type') return !!(state.heading && state.body);
+  if (step === 'style') return !!state.style;
+  if (step === 'images') return !!state.picture;
+  if (step === 'decor') return (state.heroDecor || 'none') !== 'none' || (state.pattern || 'none') !== 'none';
+  return false;
+}
+
+/** Phones: the bar under the website that names the current choice and moves to the next step. */
+export function choiceBarHTML(state, game) {
+  const at = STEPS.indexOf(state.tab);
+  const last = at === STEPS.length - 1;
+  const next = last
+    ? '<button type="button" class="btn btn-primary cb-next" data-action="send">Send</button>'
+    : '<button type="button" class="btn btn-primary cb-next" data-action="next-step">Next</button>';
+  if (state.tab === 'sections' || at < 0) {
+    const n = state.sections.length;
+    return `<div class="cb-row">
+      <p class="cb-hint"><strong>${n ? `${n} section${n === 1 ? '' : 's'} on the page` : 'Start with a few sections'}</strong><span>Tap to add. Hold one on the page to move it.</span></p>
+      ${next}
+    </div>`;
+  }
+  const list = currentList(state, game);
+  const at2 = list.items.findIndex((item) => item.id === state[list.key]);
+  const name = at2 >= 0 ? itemName(list.items[at2]) : 'Not chosen yet';
+  const count = at2 >= 0 ? `${at2 + 1} of ${list.items.length}` : `${list.items.length} to try`;
+  const word = list.label.toLowerCase();
+  const toggle = list.lists.length > 1
+    ? `<div class="cb-lists" role="group" aria-label="Which ${esc(state.tab)} choice">${list.lists.map(([key, label]) => `<button type="button" data-action="set-list" data-key="${key}" aria-pressed="${key === list.key}">${esc(label)}</button>`).join('')}</div>`
+    : '';
+  return `${toggle}<div class="cb-row">
+    <button type="button" class="cb-arrow" data-action="cycle-choice" data-dir="-1" aria-label="Previous ${esc(word)}">‹</button>
+    <button type="button" class="cb-label" data-action="open-all" aria-label="${esc(list.label)}: ${esc(name)}, ${count}. Show all choices"><strong>${esc(name)}</strong><span>${count} · swipe the page, or tap for all</span></button>
+    <button type="button" class="cb-arrow" data-action="cycle-choice" data-dir="1" aria-label="Next ${esc(word)}">›</button>
+    ${next}
+  </div>`;
+}
+
+let swipeNote = null;
+/** Remember that the next change came from a swipe or arrow, so the preview can animate and name it. */
+export function noteCycle(dir, name) {
+  swipeNote = { dir, name };
 }
 
 /** Resting heights of the options panel on phones: a peek row, half the screen, or nearly all of it. */
@@ -171,13 +250,28 @@ function designKey(state) {
   });
 }
 
+function zoomMode(state) {
+  if (state.overview) return 'page';
+  return window.matchMedia(COMPACT_QUERY).matches ? 'width' : 'actual';
+}
+
+/** Size the website inside the preview for the current screen. */
+export function refit(root, state) {
+  applyZoom(root?.querySelector('.browser-page'), zoomMode(state), state.previewMode === 'mobile');
+}
+
+export function mount(section, state) {
+  refit(section, state);
+}
+
 export function render(state, game, client) {
   const result = score(state, client, game);
   const who = firstName(client);
   const live = liveMood(state, result);
   const tabs = [['sections', 'Sections'], ...TABS].map(([id, label]) => {
     const on = state.tab === id;
-    return `<button type="button" class="tab${on ? ' is-on' : ''}${id === 'sections' ? ' tab-sections' : ''}" data-action="set-tab" data-tab="${id}" aria-selected="${on}" role="tab">${icon(id)}<span class="tab-l">${label}</span></button>`;
+    const done = stepDone(state, id);
+    return `<button type="button" class="tab${on ? ' is-on' : ''}${done ? ' is-done' : ''}${id === 'sections' ? ' tab-sections' : ''}" data-action="set-tab" data-tab="${id}" aria-selected="${on}" role="tab">${icon(id)}<span class="tab-l">${label}</span><span class="tab-done" aria-hidden="true">✓</span></button>`;
   }).join('');
   return `<div class="screen screen-build">
     <header class="topbar build-bar">
@@ -205,6 +299,7 @@ export function render(state, game, client) {
         <div class="section-bar" id="build-section-bar">${sectionBar(state, game)}</div>
         <div class="preview-wrap">
           <div id="build-preview">${browserShell(state, client, renderSite(state, client, game))}</div>
+          <p class="swipe-toast" id="build-toast" aria-hidden="true"></p>
           <div class="preview-float">
             <button type="button" class="float-btn" data-action="toggle-overview" aria-pressed="${!!state.overview}">${icon('whole')}<span>Whole page</span></button>
             <div class="seg preview-toggle" role="group" aria-label="Preview width">
@@ -214,6 +309,7 @@ export function render(state, game, client) {
           </div>
         </div>
       </div>
+      <div class="choice-bar" id="build-choice">${choiceBarHTML(state, game)}</div>
       <div class="client-dock${state.comment ? ' is-talking' : ''}" id="build-client">${dockHTML(state, client, result)}</div>
       <aside class="panel" id="build-panel" data-tab="${esc(state.tab)}" data-snap="${sheetSnap}" aria-label="Style options">
         <button type="button" class="sheet-grabber" data-sheet-grabber aria-label="${grabberLabel()}"><span aria-hidden="true"></span></button>
@@ -224,16 +320,10 @@ export function render(state, game, client) {
   </div>`;
 }
 
-/** Re-fit the whole-page view, e.g. after a resize or once pictures have loaded. */
-export function refit(root, state) {
-  if (!state.overview) return;
-  fitOverview(root?.querySelector('.browser-page.is-overview'), state.previewMode === 'mobile');
-}
-
 function focusKey(el) {
   if (!el?.dataset?.action) return null;
   const d = el.dataset;
-  return `[data-action="${d.action}"]${d.dir ? `[data-dir="${d.dir}"]` : ''}${d.layout ? `[data-layout="${d.layout}"]` : ''}${d.columns ? `[data-columns="${d.columns}"]` : ''}`;
+  return `[data-action="${d.action}"]${d.key ? `[data-key="${d.key}"]` : ''}${d.dir ? `[data-dir="${d.dir}"]` : ''}${d.layout ? `[data-layout="${d.layout}"]` : ''}${d.columns ? `[data-columns="${d.columns}"]` : ''}`;
 }
 
 function paintDock(root, state, client, result) {
@@ -285,8 +375,19 @@ export function sync(root, state, prev, game, client, history) {
       const keepScroll = oldPage?.scrollTop || 0;
       preview.innerHTML = browserShell(state, client, renderSite(state, client, game));
       const page = preview.querySelector('.browser-page');
-      if (state.overview) fitOverview(page, state.previewMode === 'mobile');
-      else if (page && !prev.overview) page.scrollTop = keepScroll;
+      applyZoom(page, zoomMode(state), state.previewMode === 'mobile');
+      if (page && !state.overview && !prev.overview) page.scrollTop = keepScroll;
+      if (swipeNote && page) {
+        page.classList.add(swipeNote.dir > 0 ? 'swipe-in-next' : 'swipe-in-prev');
+        const toast = root.querySelector('#build-toast');
+        if (toast) {
+          toast.textContent = swipeNote.name;
+          toast.classList.remove('is-on');
+          void toast.offsetWidth;
+          toast.classList.add('is-on');
+        }
+      }
+      swipeNote = null;
       const moved = state.selectedSection !== prev.selectedSection || state.sections.length !== prev.sections.length;
       const block = page?.querySelector('.block.is-selected');
       if (moved && page && block && !state.overview) {
@@ -308,6 +409,7 @@ export function sync(root, state, prev, game, client, history) {
     if (tileType && tileHome) tileHome.querySelector(`.section-tile[data-type="${tileType}"]`)?.focus();
 
     paintDock(root, state, client, result);
+    root.querySelectorAll('.tab').forEach((tab) => tab.classList.toggle('is-done', stepDone(state, tab.dataset.tab)));
     root.querySelectorAll('[data-action="undo"]').forEach((btn) => { btn.disabled = !history.canUndo(); });
     root.querySelectorAll('[data-action="redo"]').forEach((btn) => { btn.disabled = !history.canRedo(); });
     const whole = root.querySelector('[data-action="toggle-overview"]');
@@ -317,6 +419,14 @@ export function sync(root, state, prev, game, client, history) {
     });
   } else if (state.comment !== prev.comment) {
     paintDock(root, state, client, score(state, client, game));
+  }
+  if (changed || state.tab !== prev.tab || state.choiceKey !== prev.choiceKey) {
+    const bar = root.querySelector('#build-choice');
+    if (bar) {
+      const key = bar.contains(document.activeElement) ? focusKey(document.activeElement) : null;
+      bar.innerHTML = choiceBarHTML(state, game);
+      if (key) bar.querySelector(key)?.focus();
+    }
   }
   if (state.tab !== prev.tab) {
     root.querySelectorAll('.tab').forEach((tab) => {
@@ -463,6 +573,7 @@ export function bindSheet(root) {
   return {
     /** Make room to see the website again, e.g. after picking a section to edit. */
     peek() { if (compact() && sheetSnap !== 'peek') setSnap('peek'); },
+    open(name = 'half') { if (compact()) setSnap(name); },
   };
 }
 
@@ -556,4 +667,36 @@ export function bindTouchReorder(root, { onDrop, onStart }) {
   root.addEventListener('contextmenu', (e) => {
     if (e.target.closest('.browser-page .block')) e.preventDefault();
   });
+}
+
+/**
+ * Phones: swipe left or right on the website to try the next or previous option for this step.
+ * Up and down still scroll the page.
+ */
+export function bindSwipe(root, { getState, onSwipe }) {
+  let start = null;
+  root.addEventListener('touchstart', (e) => {
+    const page = e.target.closest('.browser-page');
+    const state = getState();
+    if (!page || e.touches.length !== 1 || state.tab === 'sections' || state.overview) { start = null; return; }
+    if (!window.matchMedia(COMPACT_QUERY).matches) { start = null; return; }
+    const t = e.touches[0];
+    start = { x: t.clientX, y: t.clientY, axis: null };
+  }, { passive: true });
+  root.addEventListener('touchmove', (e) => {
+    if (!start || document.body.classList.contains('is-reordering')) return;
+    const t = e.touches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (!start.axis && Math.hypot(dx, dy) > 12) start.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+    if (start.axis === 'x') {
+      e.preventDefault();
+      start.dx = dx;
+    }
+  }, { passive: false });
+  root.addEventListener('touchend', () => {
+    if (start?.axis === 'x' && Math.abs(start.dx || 0) > 48) onSwipe(start.dx < 0 ? 1 : -1);
+    start = null;
+  });
+  root.addEventListener('touchcancel', () => { start = null; });
 }

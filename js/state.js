@@ -19,6 +19,7 @@ export function initialState(meta) {
     tab: 'colour',
     previewMode: 'desktop',
     overview: false,
+    choiceKey: null,
     timeLeft: meta?.timerSeconds ?? 300,
     startedAt: null,
     autoSent: false,
