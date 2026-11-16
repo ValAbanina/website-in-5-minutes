@@ -665,7 +665,7 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 .program-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 /* Program cards: an illustrated colour band, then the details; buttons line up at the bottom */
 .program { --prog: var(--color-brand-primary); --prog-on: #fff; background: var(--color-surface-default); border: var(--border-ui); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow-card); display: flex; flex-direction: column; transition: transform 160ms ease; }
-.program:hover { transform: translateY(-4px) rotate(-.6deg); }
+.program:hover { transform: translateY(-3px); }
 .program-art { position: relative; border-bottom: var(--border-ui); background: color-mix(in srgb, var(--prog) 22%, #fff); }
 .program-art img { display: block; width: 100%; height: auto; aspect-ratio: 320 / 150; }
 .program-tag { position: absolute; left: 14px; bottom: -14px; margin: 0; padding: 5px 12px; background: var(--prog); color: var(--prog-on); border: var(--border-ui); border-radius: var(--radius-pill); font: var(--type-label); transform: rotate(-2deg); box-shadow: 2px 2px 0 #000; }
@@ -676,7 +676,8 @@ body[data-client="brenda"] { --client: var(--client-brenda); }
 .program .chips { margin: 2px 0 0; }
 .program .chips li { border-color: var(--prog); background: color-mix(in srgb, var(--prog) 12%, #fff); }
 .program-actions { margin-top: auto; padding-top: 8px; display: grid; gap: 6px; }
-.program .btn-primary { background: var(--prog); color: var(--prog-on); justify-content: center; text-align: center; }
+.program .btn-primary { background: var(--prog); border-color: var(--prog); color: var(--prog-on); justify-content: center; text-align: center; }
+.program .btn-primary:hover { background: var(--prog-hover, var(--prog)); border-color: var(--prog-hover, var(--prog)); color: var(--prog-on); }
 .program .text-btn { justify-self: start; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }
 .chips li { border: var(--border-ui); border-radius: var(--radius-pill); padding: 6px 10px; background: var(--color-surface-default); }

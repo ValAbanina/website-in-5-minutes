@@ -9,7 +9,10 @@ export function render(state, game) {
   const cards = game.programs.map((program) => {
     const session = infoUrl(config, program);
     const learns = program.learn.map((item) => `<li>${esc(item)}</li>`).join('');
-    return `<article class="program" data-program="${esc(program.id)}" style="--prog:${esc(program.color)};--prog-on:${esc(program.onColor || '#000')}">
+    // Hover keeps the program's own colour: a little darker under white text, a little lighter under black text.
+    const onDark = /^#?f{3}(f{3})?$/i.test(program.onColor || '');
+    const hover = `color-mix(in srgb, ${program.color} ${onDark ? '84%, #000' : '78%, #fff'})`;
+    return `<article class="program" data-program="${esc(program.id)}" style="--prog:${esc(program.color)};--prog-on:${esc(program.onColor || '#000')};--prog-hover:${esc(hover)}">
       <div class="program-art">
         <img src="assets/svg/programs/${esc(program.id)}.svg" alt="">
         <p class="program-tag">${esc(program.tagline)}</p>
